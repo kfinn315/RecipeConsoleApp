@@ -23,6 +23,8 @@ public class ProgramCLI()
             { "Add Recipe", ()=>recipes.Add() },
             { "Edit Recipe", ()=>recipes.Edit() }};
 
+        AnsiConsole.MarkupLine("[underline red]Welcome[/] to the Recipe Console App!");
+
         CLIUtilities.MainMenuCLI(choiceMapAction);
 
         AnsiConsole.Clear();
