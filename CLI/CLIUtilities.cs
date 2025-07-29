@@ -1,3 +1,4 @@
+using RecipeConsoleApp.CLI.Interfaces;
 using Spectre.Console;
 
 namespace RecipeConsoleApp.CLI;
@@ -7,7 +8,7 @@ public class CLIUtilities
     /**
     * Display a menu to the console with the choices and actions, appending 'Exit' to the choices for exiting the menu loop
     */
-    public static void MainMenuCLI(Dictionary<string, Action> choiceMap)
+    public static void MenuLoop(Dictionary<string, IPage> choiceMap)
     {
         var exit = false;
         do
@@ -23,8 +24,7 @@ public class CLIUtilities
             }
             else
             {
-                AnsiConsole.Clear();
-                choiceMap[selection].Invoke();
+                choiceMap[selection].Display();
                 AnsiConsole.WriteLine();
                 AnsiConsole.Prompt(new TextPrompt<string>("Enter to return to menu").AllowEmpty());
                 AnsiConsole.Clear();
@@ -47,7 +47,8 @@ public class CLIUtilities
             {
                 list.Add(input);
             }
-            PrintList("List is now:", list);
+            AnsiConsole.WriteLine("List is now:");
+            PrintList(list);
         } while (!string.IsNullOrEmpty(input));
         AnsiConsole.WriteLine("List complete");
         return list;
@@ -73,9 +74,8 @@ public class CLIUtilities
     /**
     * Print a list of items or "(None)" if list is null or empty
     **/
-    public static void PrintList(string title, IEnumerable<string>? items)
+    public static void PrintList(IEnumerable<string>? items)
     {
-        AnsiConsole.WriteLine(title);
         if (items != null && items.Any())
         {
             foreach (var item in items)

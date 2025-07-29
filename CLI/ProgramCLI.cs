@@ -1,4 +1,5 @@
 using RecipeConsoleApp.CLI.Categories;
+using RecipeConsoleApp.CLI.Interfaces;
 using RecipeConsoleApp.CLI.Recipes;
 using RecipeConsoleApp.Core.Entities;
 using RecipeConsoleApp.Core.Interfaces;
@@ -13,19 +14,20 @@ public class ProgramCLI()
         using var _categoryRepo = categoryRepository;
         using var _recipeRepo = recipeRepository;
 
-        var recipes = new RecipesMenu(_recipeRepo, _categoryRepo);
-        var categories = new CategoriesMenu(_categoryRepo);
+        var recipes = new RecipesMenu(_recipeRepo, _categoryRepo, new RecipesCLI());
+        var categories = new CategoriesMenu(_categoryRepo, new CategoriesCLI());
 
-        var choiceMapAction = new Dictionary<string, Action> {
-            { "Add Category", ()=>categories.Add() },
-            { "Edit Category", ()=>categories.Edit() },
-            { "List Recipes", ()=>recipes.List() },
-            { "Add Recipe", ()=>recipes.Add() },
-            { "Edit Recipe", ()=>recipes.Edit() }};
+        var menuOptions = new Dictionary<string, IPage> {
+            { "List Category", categories.ListPage },
+            { "Add Category", categories.AddPage},
+            { "Edit Category", categories.EditPage },
+            { "List Recipes", recipes.ListPage},
+            { "Add Recipe", recipes.AddPage },
+            { "Edit Recipe", recipes.EditPage }};
 
         AnsiConsole.MarkupLine("[underline red]Welcome[/] to the Recipe Console App!");
 
-        CLIUtilities.MainMenuCLI(choiceMapAction);
+        CLIUtilities.MenuLoop(menuOptions);
 
         AnsiConsole.Clear();
         AnsiConsole.WriteLine("Goodbye!");

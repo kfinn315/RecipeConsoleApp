@@ -1,3 +1,4 @@
+using RecipeConsoleApp.CLI.Interfaces;
 using RecipeConsoleApp.Core.Entities;
 using Spectre.Console;
 
@@ -5,22 +6,22 @@ namespace RecipeConsoleApp.CLI.Categories;
 /*
 * CLI Display or Input for a list of Categories
 */
-public class CategoriesCLI
+public class CategoriesCLI : ICategoriesCLI
 {
-    public static void List(IEnumerable<Category> categories)
+    public void DisplayList(IEnumerable<Category> categories)
     {
-        CLIUtilities.PrintList("Categories", categories.Select(x => x.Name));
+        AnsiConsole.WriteLine("Current Categories:");
+        CLIUtilities.PrintList(categories.Select(x => x.Name));
     }
 
-    public static Category Add(IEnumerable<Category> categories)
+    public Category DisplayCreate()
     {
-        AnsiConsole.WriteLine("Add Category");
-        return CategoryCLI.Create(categories.Count());
+        var name = AnsiConsole.Prompt<string>(new TextPrompt<string>("Enter name"));
+        return new Category { Name = name };
     }
 
-    public static Category? Edit(IEnumerable<Category> categories)
+    public Category? DisplayEdit(IEnumerable<Category> categories)
     {
-        AnsiConsole.WriteLine("Edit Category");
         if (!categories.Any())
         {
             AnsiConsole.WriteLine("No categories to edit. Add a category first.");

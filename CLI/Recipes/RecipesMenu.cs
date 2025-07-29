@@ -1,3 +1,5 @@
+using RecipeConsoleApp.CLI.Interfaces;
+using RecipeConsoleApp.CLI.Pages;
 using RecipeConsoleApp.Core.Entities;
 using RecipeConsoleApp.Core.Interfaces;
 
@@ -11,37 +13,39 @@ public class RecipesMenu
     private readonly IRepository<Recipe> recipeRepository;
     private readonly IRepository<Category> categoryRepository;
 
-    public RecipesMenu(IRepository<Recipe> repository, IRepository<Category> categories)
+    public RecipesMenu(IRepository<Recipe> repository, IRepository<Category> categories, IRecipesCLI recipesCLI)
     {
         recipeRepository = repository;
         categoryRepository = categories;
-    }
-
-    public void List()
-    {
-        RecipesCLI.List(recipeRepository.List());
-    }
-
-    public void Add()
-    {
-        var recipe = RecipesCLI.Add(categoryRepository.List());
-        if (recipe != null)
+        this.ListPage = new Page("List Recipes", () =>
         {
-            recipeRepository.Add(recipe);
-        }
-    }
-
-    public void Edit()
-    {
-        var recipes = recipeRepository.List();
-        var categoryOptions = categoryRepository.List();
-
-        var editRecip = RecipesCLI.Edit(categoryOptions, recipes);
-
-        if (editRecip != null)
+            recipesCLI.List(recipeRepository.List());
+        });
+        this.AddPage = new Page("Add Recipe", () =>
         {
-            recipeRepository.Edit(editRecip);
-        }
+            var recipe = recipesCLI.Add(categoryRepository.List());
+            if (recipe != null)
+            {
+                recipeRepository.Add(recipe);
+            }
+        });
+        this.EditPage = new Page("Edit Recipe", () =>
+        {
+            var recipes = recipeRepository.List();
+            var categoryOptions = categoryRepository.List();
+
+            var editRecip = recipesCLI.Edit(categoryOptions, recipes);
+
+            if (editRecip != null)
+            {
+                recipeRepository.Edit(editRecip);
+            }
+        });
     }
+
+    public IPage ListPage { get; }
+    public IPage AddPage { get; }
+    public IPage EditPage { get; }
+
 
 }

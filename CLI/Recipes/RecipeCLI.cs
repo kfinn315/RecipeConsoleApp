@@ -50,8 +50,10 @@ public class RecipeCLI
     public static void PrintDetails(Recipe recipe)
     {
         AnsiConsole.WriteLine("Recipe: " + recipe.Title + ":");
-        CLIUtilities.PrintList("Categories", recipe.Categories);
-        CLIUtilities.PrintList("Ingredients", recipe.Ingredients);
+        AnsiConsole.WriteLine("Categories");
+        CLIUtilities.PrintList(recipe.Categories);
+        AnsiConsole.WriteLine("Ingredients");
+        CLIUtilities.PrintList(recipe.Ingredients);
         AnsiConsole.WriteLine("Instructions");
         AnsiConsole.WriteLine(recipe.Instructions ?? "No instructions");
     }

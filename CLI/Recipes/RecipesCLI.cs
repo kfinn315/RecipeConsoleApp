@@ -1,12 +1,14 @@
+using RecipeConsoleApp.CLI.Interfaces;
 using RecipeConsoleApp.Core.Entities;
 using Spectre.Console;
 
 namespace RecipeConsoleApp.CLI.Recipes;
-public class RecipesCLI
+
+public class RecipesCLI : IRecipesCLI
 {
-    public static void List(IEnumerable<Recipe> recipes)
+    public void List(IEnumerable<Recipe> recipes)
     {
-        CLIUtilities.SectionTitle("Recipes");
+        AnsiConsole.WriteLine("Current Recipes:");
 
         if (!recipes.Any())
         {
@@ -26,7 +28,7 @@ public class RecipesCLI
             // Add header row 
             grid.AddRow(new string[] { "Id", "Title", "Categories", "Ingredients", "Instructions" });
 
-            foreach (var item in recipes.Select(x => new string[] { x.Id.ToString(), x.Title, string.Concat(x.Categories ?? []), string.Concat(x.Ingredients ?? []), x.Instructions }))
+            foreach (var item in recipes.Select(x => new string[] { x.Id?.ToString() ?? "?", x.Title, string.Concat(x.Categories ?? []), string.Concat(x.Ingredients ?? []), x.Instructions }))
             {
                 grid.AddRow(item);
 
@@ -35,9 +37,8 @@ public class RecipesCLI
         }
     }
 
-    public static Recipe? Add(IEnumerable<Category> categoryOptions)
+    public Recipe? Add(IEnumerable<Category> categoryOptions)
     {
-        CLIUtilities.SectionTitle("Add Recipe");
         if (!categoryOptions.Any())
         {
             AnsiConsole.WriteLine("No categories. Add a category first.");
@@ -45,9 +46,8 @@ public class RecipesCLI
         }
         return RecipeCLI.Create(categoryOptions);
     }
-    public static Recipe? Edit(IEnumerable<Category> categoryOptions, IEnumerable<Recipe> recipes)
+    public Recipe? Edit(IEnumerable<Category> categoryOptions, IEnumerable<Recipe> recipes)
     {
-        CLIUtilities.SectionTitle("Edit Recipe");
         AnsiConsole.WriteLine("Select a recipe to edit.");
         if (!recipes.Any())
         {
