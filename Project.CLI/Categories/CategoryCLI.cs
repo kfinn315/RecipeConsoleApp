@@ -1,7 +1,7 @@
-using RecipeConsoleApp.Core.Entities;
+using Project.Core.Entities;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI.Categories;
+namespace Project.CLI.Categories;
 /*
 * CLI Display or Input of a Recipe
 */

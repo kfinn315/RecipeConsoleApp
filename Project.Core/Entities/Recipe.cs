@@ -1,5 +1,5 @@
 
-namespace RecipeConsoleApp.Core.Entities;
+namespace Project.Core.Entities;
 
 public record Recipe()
 {

@@ -1,7 +1,7 @@
-﻿using RecipeConsoleApp.CLI;
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Infrastructure.Database;
-using RecipeConsoleApp.Infrastructure.Repositories;
+﻿using Project.CLI;
+using Project.Core.Entities;
+using Project.Infrastructure.Database;
+using Project.Infrastructure.Repositories;
 
 var categoryDatastore = new JsonDataStorage<List<Category>>(new FileStreamIO("Project.Infrastructure/Data/categories.json"));
 var categoryRepo = new CategoryListRepository(categoryDatastore);

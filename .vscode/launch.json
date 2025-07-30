@@ -6,18 +6,18 @@
     "configurations": [
         {
             "console": "integratedTerminal",
-            "name": "Launch Terminal",
+            "name": "CLI - Launch Terminal",
             "request": "launch",
             "type": "coreclr",
-            "program": "${workspaceFolder}/bin/Debug/net8.0/RecipeConsoleApp.dll",
+            "program": "${workspaceFolder}/Project.CLI/bin/Debug/net8.0/Project.CLI.dll",
             "preLaunchTask": "dotnet: build"
         },
         {
             "console": "externalTerminal",
-            "name": "Launch Terminal (External)",
+            "name": "CLI - Launch Terminal (External)",
             "request": "launch",
             "type": "coreclr",
-            "program": "${workspaceFolder}/bin/Debug/net8.0/RecipeConsoleApp.dll",
+            "program": "${workspaceFolder}/Project.CLI/bin/Debug/net8.0/Project.CLI.dll",
             "preLaunchTask": "dotnet: build"
         }
     ]

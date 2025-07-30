@@ -1,8 +1,8 @@
-using RecipeConsoleApp.CLI.Interfaces;
-using RecipeConsoleApp.Core.Entities;
+using Project.CLI.Interfaces;
+using Project.Core.Entities;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI.Recipes;
+namespace Project.CLI.Recipes;
 
 public class RecipesCLI : IRecipesCLI
 {

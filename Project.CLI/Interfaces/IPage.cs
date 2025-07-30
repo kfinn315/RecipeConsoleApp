@@ -1,4 +1,4 @@
-namespace RecipeConsoleApp.CLI.Interfaces;
+namespace Project.CLI.Interfaces;
 
 public interface IPage
 {

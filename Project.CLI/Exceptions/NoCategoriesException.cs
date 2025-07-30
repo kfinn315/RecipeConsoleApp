@@ -1,4 +1,4 @@
-namespace RecipeConsoleApp.CLI.Exceptions;
+namespace Project.CLI.Exceptions;
 
 [Serializable]
 internal class NoCategoriesException : Exception

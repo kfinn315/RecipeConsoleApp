@@ -1,8 +1,8 @@
 
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Core.Interfaces;
+using Project.Core.Entities;
+using Project.Core.Interfaces;
 
-namespace RecipeConsoleApp.API;
+namespace Project.API;
 
 public class RecipeController
 {

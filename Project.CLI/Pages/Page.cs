@@ -1,7 +1,7 @@
-using RecipeConsoleApp.CLI.Interfaces;
+using Project.CLI.Interfaces;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI.Pages;
+namespace Project.CLI.Pages;
 
 public class Page : IPage
 {

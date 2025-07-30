@@ -1,4 +1,4 @@
-namespace RecipeConsoleApp.Core.Interfaces;
+namespace Project.Core.Interfaces;
 
 public interface IDataStorage<T>
 {

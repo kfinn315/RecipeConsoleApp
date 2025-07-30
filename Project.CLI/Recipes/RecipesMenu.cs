@@ -1,9 +1,9 @@
-using RecipeConsoleApp.CLI.Interfaces;
-using RecipeConsoleApp.CLI.Pages;
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Core.Interfaces;
+using Project.CLI.Interfaces;
+using Project.CLI.Pages;
+using Project.Core.Entities;
+using Project.Core.Interfaces;
 
-namespace RecipeConsoleApp.CLI.Recipes;
+namespace Project.CLI.Recipes;
 
 /*
 * CLI Display or Input for a list of Recipes

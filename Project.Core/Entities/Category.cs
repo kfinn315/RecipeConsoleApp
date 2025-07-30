@@ -1,4 +1,4 @@
-namespace RecipeConsoleApp.Core.Entities;
+namespace Project.Core.Entities;
 
 public record Category {
     public int? Id { get; set; }

@@ -1,6 +1,6 @@
-using RecipeConsoleApp.Core.Entities;
+using Project.Core.Entities;
 
-namespace RecipeConsoleApp.CLI.Interfaces;
+namespace Project.CLI.Interfaces;
 
 public interface IRecipesCLI
 {

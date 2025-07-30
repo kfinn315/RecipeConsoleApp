@@ -1,8 +1,8 @@
-using RecipeConsoleApp.CLI.Interfaces;
-using RecipeConsoleApp.Core.Entities;
+using Project.CLI.Interfaces;
+using Project.Core.Entities;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI.Categories;
+namespace Project.CLI.Categories;
 /*
 * CLI Display or Input for a list of Categories
 */

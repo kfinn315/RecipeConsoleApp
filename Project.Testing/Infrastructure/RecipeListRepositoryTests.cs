@@ -2,12 +2,12 @@
 
 
 using Moq;
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Core.Interfaces;
-using RecipeConsoleApp.Infrastructure.Repositories;
+using Project.Core.Entities;
+using Project.Core.Interfaces;
+using Project.Infrastructure.Repositories;
 using Xunit;
 
-namespace RecipeConsoleApp.UnitTests.Infrastructure;
+namespace Project.UnitTests.Infrastructure;
 
 public class RecipeListRepositoryTests
 {

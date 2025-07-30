@@ -1,7 +1,7 @@
 using System.Text.Json;
-using RecipeConsoleApp.Core.Interfaces;
+using Project.Core.Interfaces;
 
-namespace RecipeConsoleApp.Infrastructure.Database;
+namespace Project.Infrastructure.Database;
 
 /**
 * Read and write an object to a stream in JSON format

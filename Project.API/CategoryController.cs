@@ -1,8 +1,7 @@
+using Project.Core.Entities;
+using Project.Core.Interfaces;
 
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Core.Interfaces;
-
-namespace RecipeConsoleApp.API;
+namespace Project.API;
 
 public class CategoryController
 {

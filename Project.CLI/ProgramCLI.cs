@@ -1,11 +1,11 @@
-using RecipeConsoleApp.CLI.Categories;
-using RecipeConsoleApp.CLI.Interfaces;
-using RecipeConsoleApp.CLI.Recipes;
-using RecipeConsoleApp.Core.Entities;
-using RecipeConsoleApp.Core.Interfaces;
+using Project.CLI.Categories;
+using Project.CLI.Interfaces;
+using Project.CLI.Recipes;
+using Project.Core.Entities;
+using Project.Core.Interfaces;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI;
+namespace Project.CLI;
 
 public class ProgramCLI()
 {

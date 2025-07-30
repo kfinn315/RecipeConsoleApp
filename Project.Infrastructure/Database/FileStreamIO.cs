@@ -1,6 +1,6 @@
-using RecipeConsoleApp.Core.Interfaces;
+using Project.Core.Interfaces;
 
-namespace RecipeConsoleApp.Infrastructure.Database;
+namespace Project.Infrastructure.Database;
 
 public class FileStreamIO : IStreamIO
 {

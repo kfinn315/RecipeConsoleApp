@@ -1,10 +1,10 @@
 using System.Text.Json;
 using Moq;
-using RecipeConsoleApp.Core.Interfaces;
-using RecipeConsoleApp.Infrastructure.Database;
+using Project.Core.Interfaces;
+using Project.Infrastructure.Database;
 using Xunit;
 
-namespace RecipeConsoleApp.UnitTests.Infrastructure;
+namespace Project.UnitTests.Infrastructure;
 
 public class JsonDataStorageUnitTests
 {

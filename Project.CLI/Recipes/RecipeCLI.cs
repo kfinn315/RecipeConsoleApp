@@ -1,8 +1,8 @@
-using RecipeConsoleApp.CLI.Exceptions;
-using RecipeConsoleApp.Core.Entities;
+using Project.CLI.Exceptions;
+using Project.Core.Entities;
 using Spectre.Console;
 
-namespace RecipeConsoleApp.CLI.Recipes;
+namespace Project.CLI.Recipes;
 /*
 * CLI Display or Input for a Recipe
 */
