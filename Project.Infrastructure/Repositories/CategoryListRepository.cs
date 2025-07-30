@@ -16,6 +16,7 @@ public class CategoryListRepository : IRepository<Category>, IDisposable
     }
     public void Add(Category item)
     {
+        item.Id = categories.Count;
         categories.Add(item);
     }
 
