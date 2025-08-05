@@ -1,4 +1,3 @@
-using Project.API.Models;
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
