@@ -6,17 +6,18 @@ namespace Project.Infrastructure.Database;
 /**
 * Read and write an object to a stream in JSON format
 **/
-public class JsonDataStorage<T> : IDataStorage<T>
+public class JsonFileDataStorage<T> : IDataStorage<T>
 {
-    private readonly IStreamIO streamIO;
-    public JsonDataStorage(IStreamIO streamIO)
+    private readonly string path;
+
+    public JsonFileDataStorage(string path)
     {
-        this.streamIO = streamIO;
+        this.path = path;
     }
 
     public T? ReadData()
     {
-        using var streamReader = streamIO.StreamReader;
+        using var streamReader = new StreamReader(path, new FileStreamOptions() { Access = FileAccess.Read, Mode = FileMode.OpenOrCreate });
 
         var json = streamReader.ReadToEnd();
         if (string.IsNullOrEmpty(json))
@@ -37,7 +38,7 @@ public class JsonDataStorage<T> : IDataStorage<T>
 
     public void WriteData(T data)
     {
-        using var streamWriter = streamIO.StreamWriter;
+        using var streamWriter = new StreamWriter(path, new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.Create });
         var json = JsonSerializer.Serialize<T>(data);
         streamWriter.Write(json);
     }

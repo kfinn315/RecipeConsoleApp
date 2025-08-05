@@ -30,13 +30,26 @@ public class CategoryListRepositoryTests
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         List<Category>? writtenState = null;
         mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
-        var category = new Category { Id = 0, Name = "my title" };
-        using (var repo = new CategoryListRepository(mockDataStorage.Object))
-        {
-            repo.Add(category);
-        }
+        var category = new Category { Id = 3, Name = "my title" };
+        var repo = new CategoryListRepository(mockDataStorage.Object);
+        repo.Add(category);
 
         Assert.NotNull(writtenState);
         Assert.Contains(category, writtenState);
+    }
+
+    [Fact]
+    public void Test_Add_CreatesId_0()
+    {
+        var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
+        List<Category>? writtenState = null;
+        mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
+        var category = new Category { Name = "my title" };
+        var repo = new CategoryListRepository(mockDataStorage.Object);
+        repo.Add(category);
+
+        Assert.NotNull(writtenState);
+        Assert.Contains(category, writtenState);
+        Assert.Equal(0, category.Id);
     }
 }

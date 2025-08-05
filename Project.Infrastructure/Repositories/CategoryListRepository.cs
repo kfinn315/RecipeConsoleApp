@@ -4,34 +4,44 @@ using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
 
-public class CategoryListRepository : IRepository<Category>, IDisposable
+public class CategoryListRepository : IRepository<Category>
 {
-    private readonly List<Category> categories;
-    private readonly IDataStorage<List<Category>> stateManager;
+    private readonly IDataStorage<List<Category>> dataStorage;
 
-    public CategoryListRepository(IDataStorage<List<Category>> manager)
+    public CategoryListRepository(IDataStorage<List<Category>> dataStorage)
     {
-        categories = manager.ReadData() ?? new List<Category>();
-        stateManager = manager;
+        this.dataStorage = dataStorage;
+    }
+    private List<Category> Read()
+    {
+        return dataStorage.ReadData() ?? new List<Category>();
+    }
+    private void Write(List<Category> categories)
+    {
+        Console.WriteLine("Writing categories to storage");
+        dataStorage.WriteData(categories);
     }
     public void Add(Category item)
     {
-        item.Id = categories.Count;
+        var categories = Read();
+        if (item.Id == null)
+        {
+            item.Id = categories.Count;
+        }
         categories.Add(item);
+        Write(categories);
     }
 
     public void Edit(Category item)
     {
+        var categories = Read();
         categories.Add(item);
+        Write(categories);
     }
 
     public IEnumerable<Category> List()
     {
-        return categories;
+        return Read();
     }
 
-    public void Dispose()
-    {
-        stateManager.WriteData(categories);
-    }
 }

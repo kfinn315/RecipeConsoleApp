@@ -31,10 +31,8 @@ public class RecipeListRepositoryTests
         List<Recipe>? writtenState = null;
         mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Recipe>>())).Callback<List<Recipe>>(x => writtenState = x);
         var recipe = new Recipe { Id = 0, Title = "my title", Ingredients = new List<string>(), Instructions = "", Categories = new List<string>() { "c1", "c2" } };
-        using (var repo = new RecipeListRepository(mockDataStorage.Object))
-        {
-            repo.Add(recipe);
-        }
+        var repo = new RecipeListRepository(mockDataStorage.Object);
+        repo.Add(recipe);
 
         Assert.NotNull(writtenState);
         Assert.Contains(recipe, writtenState);

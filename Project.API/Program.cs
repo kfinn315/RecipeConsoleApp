@@ -12,13 +12,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRepository<Category>>(serviceProvider =>
 {
-    return new CategoryListRepository(new JsonDataStorage<List<Category>>(new FileStreamIO("./category.json")));
+    return new CategoryListRepository(new JsonFileDataStorage<List<Category>>("./Data/category.json"));
 });
-
-builder.Services.AddSingleton<IRepository<Recipe>>(serviceProvider =>
+builder.Services.AddSingleton((Func<IServiceProvider, IRepository<Recipe>>)(serviceProvider =>
 {
-    return new RecipeListRepository(new JsonDataStorage<List<Recipe>>(new FileStreamIO("./recipe.json")));
-});
+    return new RecipeListRepository(new JsonFileDataStorage<List<Recipe>>("./Data/recipe.json"));
+}));
 
 var app = builder.Build();
 
