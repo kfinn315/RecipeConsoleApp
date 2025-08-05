@@ -5,10 +5,8 @@ namespace Project.CLI;
 
 public class CLIUtilities
 {
-    /**
-    * Display a menu to the console with the choices and actions, appending 'Exit' to the choices for exiting the menu loop
-    */
-    public static void MenuLoop(Dictionary<string, IPage> choiceMap)
+
+    public static async Task MenuLoopAsync(Dictionary<string, IAsyncPage> choiceMap)
     {
         var exit = false;
         do
@@ -24,7 +22,7 @@ public class CLIUtilities
             }
             else
             {
-                choiceMap[selection].Display();
+                await choiceMap[selection].DisplayAsync();
                 AnsiConsole.WriteLine();
                 AnsiConsole.Prompt(new TextPrompt<string>("Enter to return to menu").AllowEmpty());
                 AnsiConsole.Clear();
