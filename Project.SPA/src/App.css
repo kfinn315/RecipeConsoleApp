@@ -45,22 +45,31 @@
   color: #888;
 }
 
+/** Custom **/
+
 .container {
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 925px;
+  height: 100vh;
+  padding: 2rem;
   display: grid;
-  grid-template-columns: 15% auto;
+  grid-template-columns: auto 1fr;
   grid-template-rows: max-content auto;
 }
 
 .heading {
   grid-column: 1/3;
+  padding: 2rem;
+
+}
+
+.menu {
+  padding: 2rem;
 }
 
 .content {
-  background: white;
-  color: black;
+  padding: 2rem;
 }
+
 
 ul.menu-items {
   text-align: left;
@@ -71,3 +80,7 @@ li.menu-item {
 }
 
 li.menu-item>a {}
+
+div.list {
+  text-align: left;
+}
