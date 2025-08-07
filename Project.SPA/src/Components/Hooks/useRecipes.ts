@@ -3,7 +3,14 @@ import { Client } from "../../Client/Client";
 import type { Recipe } from "../../Types/Recipe";
 import { baseUrl } from "../../Settings";
 
-export function useRecipes(): { recipes: Recipe[], addRecipe: (item: Recipe) => Promise<void>, editRecipe: (item: Recipe) => Promise<void> } {
+interface UseRecipes {
+    isLoading: boolean;
+    recipes: Recipe[];
+    addRecipe: (item: Recipe) => Promise<void>;
+    editRecipe: (item: Recipe) => Promise<void>;
+}
+
+export function useRecipes(): UseRecipes {
     const client = new Client(baseUrl);
     function addRecipe(item: Recipe): Promise<void> {
         return client.addRecipe(item);
@@ -11,11 +18,14 @@ export function useRecipes(): { recipes: Recipe[], addRecipe: (item: Recipe) => 
     function editRecipe(item: Recipe): Promise<void> {
         return client.editRecipe(item);
     }
-    const [recipes, setRecipes] = useState<Recipe[] | undefined>([]);
+    const [recipes, setRecipes] = useState<Recipe[] | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        client.getRecipes().then(items => setRecipes(items));
+        client.getRecipes().then(items => {
+            setRecipes(items);
+        }).finally(() => { setIsLoading(false) });
     }, []);
 
-    return { recipes, addRecipe, editRecipe }
+    return { isLoading, recipes, addRecipe, editRecipe }
 }

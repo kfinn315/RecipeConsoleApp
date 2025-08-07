@@ -3,9 +3,15 @@ import type { Category } from "../../Types/Category";
 import { Client } from "../../Client/Client";
 import { baseUrl } from "../../Settings";
 
-export function useCategories(): { categories: Category[], addCategory: (item: Category) => Promise<void>, editCategory: (item: Category) => Promise<void> } {
-    const client = new Client(baseUrl);
+interface UseCategories {
+    isLoading: boolean;
+    categories: Category[];
+    addCategory: (item: Category) => Promise<void>;
+    editCategory: (item: Category) => Promise<void>;
+}
 
+export function useCategories(): UseCategories {
+    const client = new Client(baseUrl);
 
     function addCategory(item: Category): Promise<void> {
         return client.addCategory(item);
@@ -13,7 +19,8 @@ export function useCategories(): { categories: Category[], addCategory: (item: C
     function editCategory(item: Category): Promise<void> {
         return client.editCategory(item);
     }
-    const [categories, setCategories] = useState<Category[] | undefined>([]);
+    const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         client.getCategories().then(items => {
@@ -21,8 +28,8 @@ export function useCategories(): { categories: Category[], addCategory: (item: C
             setCategories(items);
         }).catch((reason) => {
             console.error(reason);
-        });
+        }).finally(() => { setIsLoading(false) });
     }, []);
 
-    return { categories, addCategory, editCategory };
+    return { isLoading, categories, addCategory, editCategory };
 }
