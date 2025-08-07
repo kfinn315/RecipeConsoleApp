@@ -8,9 +8,6 @@ export function ListRecipesPage() {
     const { isLoading, recipes } = useRecipes();
     return <div>
         <h2>List Recipes</h2>
-        <div>{isLoading ? "Loading!" :
-            <RecipeList recipes={recipes} />
-        }
-        </div>
+        <RecipeList recipes={recipes} isLoading={isLoading} />
     </div>
 }
