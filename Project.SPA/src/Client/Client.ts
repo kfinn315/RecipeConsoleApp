@@ -14,14 +14,24 @@ export class Client {
         console.log('get categories')
         return fetch(this.categoryEndpoint, { method: "GET", headers: { 'Content-Type': 'application/json' } })
             .then(response => {
-                return response.json()
-            }).catch(reason => console.error(reason));
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(response.statusText)
+            }).catch((reason) => {
+                throw reason;
+            });
         // return Promise.resolve([{ Id: 0, Name: "DummyCategory0" }]);
     }
     getRecipes(): Promise<Recipe[]> {
         console.log('get recipes')
         return fetch(this.recipeEndpoint, { method: "GET" }).then(response => {
-            return response.json()
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error(response.statusText)
+        }).catch((reason) => {
+            throw reason;
         });
         // return Promise.resolve([{ Id: 0, Name: "DummyRecipe0", Categories: [0], Ingredients: ["i1", "i2"], Instructions: "instructionshere" }]);
     }
@@ -35,7 +45,12 @@ export class Client {
                 'Content-Type': 'application/json'
             },
         }).then(response => {
-            return response.json()
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error(response.statusText)
+        }).catch((reason) => {
+            throw reason;
         });
     }
     editCategory(item: Category): Promise<void> {
@@ -47,7 +62,12 @@ export class Client {
                 'Content-Type': 'application/json'
             },
         }).then(response => {
-            return response.json()
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error(response.statusText)
+        }).catch((reason) => {
+            throw reason;
         });
         // return Promise.resolve();
     }
@@ -80,7 +100,12 @@ export class Client {
                     'Content-Type': 'application/json'
                 },
             }).then(response => {
-                return response.json()
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(response.statusText)
+            }).catch((reason) => {
+                throw reason;
             });
         // return Promise.resolve();
     }
