@@ -12,7 +12,7 @@ export class Client {
 
     getCategories(): Promise<Category[]> {
         console.log('get categories')
-        return fetch({ url: this.categoryEndpoint, method: "GET", headers: { 'Content-Type': 'application/json' } })
+        return fetch(this.categoryEndpoint, { method: "GET", headers: { 'Content-Type': 'application/json' } })
             .then(response => {
                 return response.json()
             }).catch(reason => console.error(reason));
@@ -20,7 +20,7 @@ export class Client {
     }
     getRecipes(): Promise<Recipe[]> {
         console.log('get recipes')
-        return fetch({ url: this.recipeEndpoint, method: "GET" }).then(response => {
+        return fetch(this.recipeEndpoint, { method: "GET" }).then(response => {
             return response.json()
         });
         // return Promise.resolve([{ Id: 0, Name: "DummyRecipe0", Categories: [0], Ingredients: ["i1", "i2"], Instructions: "instructionshere" }]);
@@ -28,8 +28,8 @@ export class Client {
 
     addCategory(item: Category): Promise<void> {
         console.log('add category')
-        return fetch({
-            url: this.categoryEndpoint, method: "POST",
+        return fetch(this.categoryEndpoint, {
+            method: "POST",
             body: JSON.stringify(item),
             headers: {
                 'Content-Type': 'application/json'
@@ -40,8 +40,7 @@ export class Client {
     }
     editCategory(item: Category): Promise<void> {
         console.log('edit category')
-        return fetch({
-            url: this.categoryEndpoint,
+        return fetch(this.categoryEndpoint, {
             method: "PUT",
             body: JSON.stringify(item),
             headers: {
@@ -54,30 +53,35 @@ export class Client {
     }
     addRecipe(item: Recipe): Promise<void> {
         console.log('add rec')
-        return fetch({
-            url: this.recipeEndpoint,
+        return fetch(this.recipeEndpoint, {
             method: "POST",
             body: JSON.stringify(item),
             headers: {
                 'Content-Type': 'application/json'
             },
         }).then(response => {
-            return response.json()
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error(response.statusText)
+        }).catch((reason) => {
+            throw reason;
         });
         // return Promise.resolve();
     }
     editRecipe(item: Recipe): Promise<void> {
         console.log('edit rec')
-        return fetch({
-            url: this.recipeEndpoint,
-            method: "PUT",
-            body: JSON.stringify(item),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        }).then(response => {
-            return response.json()
-        });
+        return fetch(
+            this.recipeEndpoint,
+            {
+                method: "PUT",
+                body: JSON.stringify(item),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(response => {
+                return response.json()
+            });
         // return Promise.resolve();
     }
 }
