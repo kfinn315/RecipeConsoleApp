@@ -19,7 +19,18 @@ builder.Services.AddSingleton((Func<IServiceProvider, IRepository<Recipe>>)(serv
     return new RecipeListRepository(new JsonFileDataStorage<List<Recipe>>("./Data/recipe.json"));
 }));
 
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:5173") // Replace with your actual localhost port(s)
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+        });
 var app = builder.Build();
+app.UseCors("AllowLocalhost");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
