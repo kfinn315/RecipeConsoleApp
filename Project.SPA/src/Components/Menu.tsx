@@ -1,20 +1,13 @@
 import React from 'react';
-import { EditCategoryPage } from './Pages/Categories/EditCategoryPage';
-import { ListRecipesPage } from './Pages/Recipes/ListRecipesPage';
-import { AddRecipePage } from './Pages/Recipes/AddRecipePage';
-import { EditRecipePage } from './Pages/Recipes/EditRecipePage';
-import { ListCategoriesPage } from './Pages/Categories/ListCategoriesPage';
-import { AddCategoryPage } from './Pages/Categories/AddCategoryPage';
+import { RecipesPage } from './Pages/Recipes/RecipesPage';
+import { CategoriesPage } from './Pages/Categories/CategoriesPage';
+
 
 export default function Menu({ show }: { show: (page: Element) => void }) {
 
     const options = [
-        { name: "List Categories", page: <ListCategoriesPage /> },
-        { name: "Add Category", page: <AddCategoryPage /> },
-        { name: "Edit Category", page: <EditCategoryPage /> },
-        { name: "List Recipes", page: <ListRecipesPage /> },
-        { name: "Add Recipe", page: <AddRecipePage /> },
-        { name: "Edit Recipe", page: <EditRecipePage /> }
+        { name: "Categories", page: <CategoriesPage /> },
+        { name: "Recipes", page: <RecipesPage /> },
     ]
 
     return <div>

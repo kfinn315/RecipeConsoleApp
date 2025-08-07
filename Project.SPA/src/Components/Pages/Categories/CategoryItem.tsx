@@ -1,15 +1,22 @@
 import type React from 'react';
 import type { Category } from '../../../Types/Category';
-
+import { TableCell, TableRow } from '@mui/material';
 
 export function CategoryItem({ item, onClick }: { item: Category; onClick: (item: Category) => void | undefined; }) {
     function handleClick() {
         onClick(item);
     }
-    function toString(item: Category) {
-        return `${item.id} - ${item.name}`
-    }
-    return <li className='list-item'>
-        <a onClick={handleClick} href="#">{toString(item)}</a>
-    </li>
+    return <TableRow>
+        <TableCell>
+            {item.id}
+        </TableCell>
+        <TableCell>
+            {item.name}
+        </TableCell>
+        <TableCell>
+            {onClick &&
+                <a onClick={handleClick} href="#">Edit</a>
+            }
+        </TableCell>
+    </TableRow>
 }
