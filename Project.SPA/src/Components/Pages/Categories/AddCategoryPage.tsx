@@ -3,7 +3,7 @@ import { CategoryForm } from './CategoryForm';
 import type { Category } from '../../../Types/Category';
 import { useCategories } from '../../Hooks/useCategories';
 
-export function AddCategory() {
+export function AddCategoryPage() {
     const { addCategory } = useCategories();
     function handleSubmit(item: Category) {
         addCategory(item);

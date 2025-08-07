@@ -1,15 +1,20 @@
 import type React from 'react';
 import type { Category } from '../../Types/Category';
+import { useState } from 'react';
 
 export function CategoryForm({ category, onSubmit }: { category: Category | undefined; onSubmit: (item: Category) => void }) {
+    const [formCategory, setCategory] = useState<Category | undefined>(category);
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
-        console.log('submit category', event.target);
-        onSubmit({});
+        event.preventDefault();
+        onSubmit(formCategory);
     }
+
     return <form onSubmit={handleSubmit}>
-        <h3>Edit Category Form</h3>
-        <input type={'hidden'} name={'Id'} value={category?.Id} />
-        <input type={'text'} name={'Name'} value={category?.Name} />
+        <div>
+            <label for="name">Name</label>
+            <input type={'text'} name={'name'} value={category?.name} onChange={(event) => setCategory({ ...formCategory, name: event.target.value })} />
+        </div>
+        <input type={'hidden'} name={'Id'} value={category?.id} />
         <button type='submit' >Submit</button>
     </form>;
 }

@@ -4,7 +4,7 @@ import { CategoryList } from './CategoryList';
 import { useCategories } from '../../Hooks/useCategories';
 import { CategoryForm } from './CategoryForm';
 
-export function EditCategory() {
+export function EditCategoryPage() {
     const { categories, editCategory } = useCategories();
     const [selected, setSelected] = useState<Category | undefined>(undefined);
 

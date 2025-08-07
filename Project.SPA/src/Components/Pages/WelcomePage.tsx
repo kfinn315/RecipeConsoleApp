@@ -1,9 +1,9 @@
 import React from 'react';
 
-export function Welcome() {
+export function WelcomePage() {
 
     return <div>
-        <h3>Intro Page</h3>
+        <h2>Intro Page</h2>
         <p>Welcome to the React Console App!</p>
     </div>;
 }

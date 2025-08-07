@@ -4,12 +4,13 @@ import { RecipeList } from './RecipeList';
 
 
 
-export function ListRecipes() {
-    const { recipes } = useRecipes();
+export function ListRecipesPage() {
+    const { isLoading, recipes } = useRecipes();
     return <div>
-        <h3>List Recipes</h3>
-        <div>
+        <h2>List Recipes</h2>
+        <div>{isLoading ? "Loading!" :
             <RecipeList recipes={recipes} />
+        }
         </div>
     </div>
 }

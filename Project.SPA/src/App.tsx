@@ -1,10 +1,10 @@
 import './App.css'
 import Menu from './Components/Menu'
 import { useState } from 'react';
-import { Welcome } from './Components/Pages/Welcome';
+import { WelcomePage } from './Components/Pages/WelcomePage';
 
 function App() {
-  const [content, setContent] = useState<JSX.Element | undefined>(<Welcome />);
+  const [content, setContent] = useState<JSX.Element | undefined>(<WelcomePage />);
   function handleShow(element: JSX.Element) {
     setContent(element);
   }

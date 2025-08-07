@@ -6,5 +6,10 @@ export function RecipeItem({ item, onClick }: { item: Recipe; onClick: (item: Re
     function handleClick() {
         onClick(item);
     }
-    return <a onClick={handleClick} href="#">{item.Id} - {item.Name}</a>;
+    function toString(item: Recipe) {
+        return `${item.id} - ${item.title} - ${item.ingredients.join(',')} - ${item.instructions}`
+    }
+    return <li className='list-item'>
+        <a onClick={handleClick} href="#">{toString(item)}</a>
+    </li>
 }
