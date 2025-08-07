@@ -84,3 +84,8 @@ li.menu-item>a {}
 div.list {
   text-align: left;
 }
+
+.list {
+  margin: auto;
+  max-width: 590px;
+}
