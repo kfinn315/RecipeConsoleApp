@@ -2,14 +2,14 @@ import type React from 'react';
 import type { Recipe } from '../../../Types/Recipe';
 import { TableCell, TableRow } from '@mui/material';
 
-
-export function RecipeItem({ item, onClick }: { item: Recipe; onClick: (item: Recipe) => void | undefined; }) {
+/**
+ * prop.item values fill the TableCell tags
+ * when Edit anchor is clicked, prop.onClick is called, passing prop.item
+ */
+export function RecipeRow({ item, onClick }: { item: Recipe; onClick: (item: Recipe) => void | undefined; }) {
     function handleClick() {
         onClick?.(item);
     }
-    // function toString(item: Recipe) {
-    //     return `${item.id} - ${item.title} - ${item.ingredients.join(',')} - ${item.instructions}`
-    // }
     return <TableRow className='list-item'>
         <TableCell>{item.id}</TableCell>
         <TableCell>{item.title}</TableCell>

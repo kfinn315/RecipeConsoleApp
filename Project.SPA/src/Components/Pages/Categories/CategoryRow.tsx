@@ -2,7 +2,7 @@ import type React from 'react';
 import type { Category } from '../../../Types/Category';
 import { TableCell, TableRow } from '@mui/material';
 
-export function CategoryItem({ item, onClick }: { item: Category; onClick: (item: Category) => void | undefined; }) {
+export function CategoryRow({ item, onClick }: { item: Category; onClick: (item: Category) => void | undefined; }) {
     function handleClick() {
         onClick(item);
     }
