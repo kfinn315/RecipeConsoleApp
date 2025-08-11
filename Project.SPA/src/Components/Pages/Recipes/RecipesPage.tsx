@@ -1,11 +1,12 @@
 import type React from 'react';
-import { useRecipes } from '../../Hooks/useRecipes';
-import { RecipeTable } from './RecipeTable';
 import { Button } from '@mui/material';
 import { useState } from 'react';
+import { useRecipes } from '../../Hooks/useRecipes';
+import { RecipeTable } from './RecipeTable';
 import type { Recipe } from '../../../Types/Recipe';
 import { ErrorBanner } from '../../ErrorBanner';
-import { RecipeFormDialog } from './RecipeFormDialog';
+import { useCategories } from '../../Hooks/useCategories';
+import { RecipeFormCard } from './Form/RecipeFormCard';
 
 /**
  * shows a list of Recipes
@@ -14,10 +15,11 @@ import { RecipeFormDialog } from './RecipeFormDialog';
  * updates to show latest recipes after adding or editing
  */
 export function RecipesPage() {
-    const { isLoading, recipes, editRecipe, addRecipe } = useRecipes();
     const [showForm, setShowForm] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>(undefined);
+    const { isLoading, recipes, editRecipe, addRecipe } = useRecipes();
+    const { isLoading: isLoadingCategories, categories } = useCategories();
 
     const handleClick: (item: Recipe) => void = (item) => {
         setSelected(item);
@@ -44,13 +46,12 @@ export function RecipesPage() {
         setSelected(undefined);
         setShowForm(false);
     }
+
     return <div>
-        <h2>Recipes</h2>
-        <ErrorBanner message={errorMessage} />
-        <div>
-            <Button onClick={handleAddClick}>Add</Button>
-        </div>
+        <h2>Recipes {!showForm && <Button onClick={handleAddClick}>Add</Button>}</h2>
+        {(isLoading || isLoadingCategories) && "Loading..."}
+        {errorMessage && <ErrorBanner message={errorMessage} onClose={() => { setErrorMessage(undefined) }} />}
+        {showForm && <RecipeFormCard onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} recipe={selected} />}
         <RecipeTable recipes={recipes} isLoading={isLoading} onClick={handleClick} />
-        <RecipeFormDialog open={showForm} item={selected} onSubmit={handleSubmit} isAdd={selected == undefined} onClose={handleFormClose} />
     </div>
 }
