@@ -11,21 +11,28 @@ interface UseRecipes {
 }
 
 export function useRecipes(): UseRecipes {
-    const client = new Client(baseUrl);
-    function addRecipe(item: Recipe): Promise<void> {
-        return client.addRecipe(item);
-    }
-    function editRecipe(item: Recipe): Promise<void> {
-        return client.editRecipe(item);
-    }
     const [recipes, setRecipes] = useState<Recipe[] | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        client.getRecipes().then(items => {
-            setRecipes(items);
-        }).finally(() => { setIsLoading(false) });
+        setIsLoading(true);
+        getRecipes().finally(() => { setIsLoading(false) });
     }, []);
+
+    const client = new Client(baseUrl);
+    function addRecipe(item: Recipe): Promise<void> {
+        return client.addRecipe(item).then(() => { getRecipes(); });
+    }
+    function editRecipe(item: Recipe): Promise<void> {
+        return client.editRecipe(item).then(() => {
+            getRecipes();
+        });
+    }
+    function getRecipes() {
+        return client.getRecipes().then(items => {
+            setRecipes(items);
+        })
+    }
 
     return { isLoading, recipes, addRecipe, editRecipe }
 }
