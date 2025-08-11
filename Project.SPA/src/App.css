@@ -89,3 +89,16 @@ div.list {
   margin: auto;
   max-width: 590px;
 }
+
+.error-banner {
+  background: red;
+  color: white;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: auto;
+  gap: 2rem;
+  padding: 2rem;
+
+}
