@@ -12,7 +12,7 @@ function App() {
     <div className={"container"}>
       <div className='heading'>
         <h1>
-          Recipe Console App
+          <a href="#" onClick={() => setContent(<WelcomePage />)}>Recipe App</a>
         </h1>
       </div>
       <div className='menu'>
