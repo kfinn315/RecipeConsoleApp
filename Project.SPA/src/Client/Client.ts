@@ -1,6 +1,4 @@
-import type { Category } from "../Types/Category";
-import type { Recipe } from "../Types/Recipe";
-
+import type { Category, Recipe } from "../Types";
 
 export class Client {
     private recipeEndpoint: string;
@@ -21,7 +19,6 @@ export class Client {
             }).catch((reason) => {
                 throw reason;
             });
-        // return Promise.resolve([{ Id: 0, Name: "DummyCategory0" }]);
     }
     getRecipes(): Promise<Recipe[]> {
         console.log('get recipes')
@@ -33,7 +30,6 @@ export class Client {
         }).catch((reason) => {
             throw reason;
         });
-        // return Promise.resolve([{ Id: 0, Name: "DummyRecipe0", Categories: [0], Ingredients: ["i1", "i2"], Instructions: "instructionshere" }]);
     }
 
     addCategory(item: Category): Promise<void> {
@@ -69,7 +65,6 @@ export class Client {
         }).catch((reason) => {
             throw reason;
         });
-        // return Promise.resolve();
     }
     addRecipe(item: Recipe): Promise<void> {
         console.log('add rec')
@@ -87,7 +82,6 @@ export class Client {
         }).catch((reason) => {
             throw reason;
         });
-        // return Promise.resolve();
     }
     editRecipe(item: Recipe): Promise<void> {
         console.log('edit rec')
@@ -107,6 +101,5 @@ export class Client {
             }).catch((reason) => {
                 throw reason;
             });
-        // return Promise.resolve();
     }
 }
