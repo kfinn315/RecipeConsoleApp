@@ -1,8 +1,8 @@
 using Project.API.Endpoints;
-using Project.Core.Entities;
-using Project.Core.Interfaces;
-using Project.Infrastructure.Database;
-using Project.Infrastructure.Repositories;
+using Project.API.Extensions;
+
+string SPA_URL = "http://localhost:5173";
+string JSON_DATA_PATH = "./Data";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,25 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IRepository<Category>>(serviceProvider =>
-{
-    return new CategoryListRepository(new JsonFileDataStorage<List<Category>>("./Data/category.json"));
-});
-builder.Services.AddSingleton((Func<IServiceProvider, IRepository<Recipe>>)(serviceProvider =>
-{
-    return new RecipeListRepository(new JsonFileDataStorage<List<Recipe>>("./Data/recipe.json"));
-}));
+
+builder.Services.RegisterJsonFileRepositories(JSON_DATA_PATH);
 
 builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost",
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:5173") // Replace with your actual localhost port(s)
+                    builder.WithOrigins(SPA_URL)
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
         });
+
 var app = builder.Build();
 app.UseCors("AllowLocalhost");
 
