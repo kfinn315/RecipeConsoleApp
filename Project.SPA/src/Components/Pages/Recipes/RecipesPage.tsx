@@ -8,6 +8,7 @@ import { ErrorBanner } from '../../ErrorBanner';
 import { useCategories } from '../../Hooks/useCategories';
 import { RecipeList } from './RecipeList';
 import { RecipeFormDialog } from './Form/RecipeFormDialog';
+import { RecipeCards } from './RecipeCards';
 
 /**
  * shows a list of Recipes
@@ -15,7 +16,7 @@ import { RecipeFormDialog } from './Form/RecipeFormDialog';
  * shows error message if client encounters error w/ API
  * updates to show latest recipes after adding or editing
  */
-export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" }) {
+export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" | "cards" }) {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>(undefined);
@@ -48,13 +49,22 @@ export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" 
         setShowForm(false);
     }
 
+    const getRecipes = (variant) => {
+        switch (variant) {
+            case 'list': return <RecipeList recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
+            case 'cards': return <RecipeCards recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
+            case 'table':
+            default: return <RecipeTable recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
+        }
+    }
+
+
     return <div className="recipes-page">
         <h2>Recipes {!showForm && <Button onClick={handleAddClick}>Add</Button>}</h2>
         {(isLoading || isLoadingCategories) && "Loading..."}
         {errorMessage && <ErrorBanner message={errorMessage} onClose={() => { setErrorMessage(undefined) }} />}
         {/* <RecipeFormCard show={showForm} onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} item={selected} /> */}
         <RecipeFormDialog show={showForm} onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} item={selected} />
-        {variant == "list" ?
-            <RecipeList recipes={recipes} isLoading={isLoading} onClick={handleClick} /> : <RecipeTable recipes={recipes} isLoading={isLoading} onClick={handleClick} />}
+        {getRecipes(variant)}
     </div>
 }

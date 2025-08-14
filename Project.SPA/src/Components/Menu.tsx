@@ -8,6 +8,7 @@ export default function Menu({ show }: { show: (page: Element) => void }) {
     const options = [
         { name: "Recipes Table", page: <RecipesPage /> },
         { name: "Recipes List", page: <RecipesPage variant="list" /> },
+        { name: "Recipes Cards", page: <RecipesPage variant="cards" /> },
         { name: "Categories", page: <CategoriesPage /> },
     ]
 

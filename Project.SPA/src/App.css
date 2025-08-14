@@ -111,3 +111,24 @@ div.list {
 .recipe-form-card.hidden {
   max-height: 0px;
 }
+
+.cards {
+  display: flex;
+  flex-flow: wrap;
+  gap: 5rem;
+}
+
+.cards .card ul {
+  padding-left: 0px;
+  text-align: left;
+}
+
+.cards .card li {
+  list-style: none;
+
+}
+
+.card.card-max {
+  min-width: 400px;
+  min-height: 400px;
+}
