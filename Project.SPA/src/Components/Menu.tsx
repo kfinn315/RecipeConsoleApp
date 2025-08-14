@@ -6,11 +6,12 @@ import { CategoriesPage } from './Pages/Categories/CategoriesPage';
 export default function Menu({ show }: { show: (page: Element) => void }) {
 
     const options = [
+        { name: "Recipes Table", page: <RecipesPage /> },
+        { name: "Recipes List", page: <RecipesPage variant="list" /> },
         { name: "Categories", page: <CategoriesPage /> },
-        { name: "Recipes", page: <RecipesPage /> },
     ]
 
-    return <div>
+    return <>
         <h3>Menu</h3>
         <ul className='menu-items'>
             {options.map((option, ix) => (
@@ -20,5 +21,5 @@ export default function Menu({ show }: { show: (page: Element) => void }) {
             )
             )}
         </ul>
-    </div>
+    </>
 }

@@ -2,7 +2,6 @@
   max-width: 1280px;
   height: 100vh;
   margin: 0 auto;
-  padding-inline: 2rem;
   text-align: center;
 }
 
@@ -58,7 +57,7 @@
 
 .heading {
   grid-column: 1/3;
-  padding: 2rem;
+  padding-bottom: 2rem;
 
 }
 
@@ -73,6 +72,7 @@
 
 ul.menu-items {
   text-align: left;
+  padding-left: 0px;
 }
 
 li.menu-item {
@@ -101,4 +101,13 @@ div.list {
   gap: 2rem;
   padding: 2rem;
 
+}
+
+.recipe-form-card {
+  max-height: 100vh;
+  /* transition: height 2s ease-in-out; */
+}
+
+.recipe-form-card.hidden {
+  max-height: 0px;
 }

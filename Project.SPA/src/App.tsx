@@ -1,10 +1,10 @@
 import './App.css'
 import Menu from './Components/Menu'
 import { useState } from 'react';
-import { WelcomePage } from './Components/Pages/WelcomePage';
+import { RecipesPage } from './Components/Pages/Recipes/RecipesPage';
 
 function App() {
-  const [content, setContent] = useState<JSX.Element | undefined>(<WelcomePage />);
+  const [content, setContent] = useState<JSX.Element | undefined>(<RecipesPage />);
   function handleShow(element: JSX.Element) {
     setContent(element);
   }
@@ -12,8 +12,9 @@ function App() {
     <div className={"container"}>
       <div className='heading'>
         <h1>
-          <a href="#" onClick={() => setContent(<WelcomePage />)}>Recipe App</a>
+          Recipe App
         </h1>
+        <h2>Welcome!</h2>
       </div>
       <div className='menu'>
         <Menu show={handleShow} />
