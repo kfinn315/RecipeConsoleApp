@@ -66,7 +66,7 @@ export class Client {
             throw reason;
         });
     }
-    addRecipe(item: Recipe): Promise<void> {
+    addRecipe(item: Recipe): Promise<Recipe[]> {
         console.log('add rec')
         return fetch(this.recipeEndpoint, {
             method: "POST",
@@ -83,7 +83,7 @@ export class Client {
             throw reason;
         });
     }
-    editRecipe(item: Recipe): Promise<void> {
+    editRecipe(item: Recipe): Promise<Recipe[]> {
         console.log('edit rec')
         return fetch(
             this.recipeEndpoint,

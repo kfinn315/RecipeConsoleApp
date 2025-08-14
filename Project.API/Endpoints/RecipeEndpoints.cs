@@ -17,17 +17,17 @@ public static class RecipeEndpoints
         //     return Results.Ok(repository.List());
         // });
         app.MapPost("recipes/", (Recipe recipe, IRepository<Recipe> repository) =>
-       {
-
-           // await context.Response.WriteAsJsonAsync(new Response<object> { Success = true });
-           repository.Add(recipe);
-           return Results.Ok();
-       });
-        app.MapPut("recipes/", (Recipe recipe) => //edit
         {
 
             // await context.Response.WriteAsJsonAsync(new Response<object> { Success = true });
-            return Results.Ok();
+            repository.Add(recipe);
+            return Results.Ok(repository.List());
         });
+        app.MapPut("recipes/", (Recipe recipe, IRepository<Recipe> repository) => //edit
+            {
+                // await context.Response.WriteAsJsonAsync(new Response<object> { Success = true });
+                repository.Edit(recipe);
+                return Results.Ok(repository.List());
+            });
     }
 }

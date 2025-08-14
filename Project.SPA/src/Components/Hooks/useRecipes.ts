@@ -21,12 +21,12 @@ export function useRecipes(): UseRecipes {
 
     const client = new Client(baseUrl);
     function addRecipe(item: Recipe): Promise<void> {
-        return client.addRecipe(item).then(() => { getRecipes(); });
+        setIsLoading(true);
+        return client.addRecipe(item).then((recipes) => { setRecipes(recipes); }).finally(() => { setIsLoading(false) });
     }
     function editRecipe(item: Recipe): Promise<void> {
-        return client.editRecipe(item).then(() => {
-            getRecipes();
-        });
+        setIsLoading(true);
+        return client.editRecipe(item).then((recipes) => { setRecipes(recipes); }).finally(() => { setIsLoading(false) });
     }
     function getRecipes() {
         return client.getRecipes().then(items => {
