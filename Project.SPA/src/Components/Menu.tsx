@@ -1,26 +1,19 @@
 import React from 'react';
-import { RecipesPage } from './Pages/Recipes/RecipesPage';
-import { CategoriesPage } from './Pages/Categories/CategoriesPage';
+import type { JSX } from '@emotion/react/jsx-runtime';
+import { Button } from '@mui/material';
 
+export interface MenuOption {
+    name: string;
+    page: JSX.Element;
 
-export default function Menu({ show }: { show: (page: Element) => void }) {
-
-    const options = [
-        { name: "Recipes Table", page: <RecipesPage /> },
-        { name: "Recipes List", page: <RecipesPage variant="list" /> },
-        { name: "Recipes Cards", page: <RecipesPage variant="cards" /> },
-        { name: "Categories", page: <CategoriesPage /> },
-    ]
-
-    return <>
-        <h3>Menu</h3>
-        <ul className='menu-items'>
-            {options.map((option, ix) => (
-                <li key={ix} className={"menu-item"}>
-                    <a href="#" onClick={() => { show(option.page) }}>{option.name}</a>
-                </li>
-            )
-            )}
-        </ul>
-    </>
+}
+export default function Menu({ selected, options, onClick }: { selected: string | undefined, options: MenuOption[], onClick: (option: MenuOption) => void }) {
+    return <ul className='menu-items'>
+        {options.map((option, ix) => (
+            <li key={ix} className={`menu-item ${selected !== undefined && option.name == selected ? "menu-item-highlight" : ""}`}>
+                <Button className="menu-button" variant='outlined' onClick={() => { onClick(option) }}><div className='icon'></div>{option.name}</Button>
+            </li>
+        )
+        )}
+    </ul>
 }

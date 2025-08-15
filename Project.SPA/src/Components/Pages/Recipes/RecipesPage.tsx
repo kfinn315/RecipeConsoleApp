@@ -58,9 +58,8 @@ export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" 
         }
     }
 
-
     return <div className="recipes-page">
-        <h2>Recipes {!showForm && <Button onClick={handleAddClick}>Add</Button>}</h2>
+        <h3>Recipes ({recipes?.length ?? 0})</h3>
         {(isLoading || isLoadingCategories) && "Loading..."}
         {errorMessage && <ErrorBanner message={errorMessage} onClose={() => { setErrorMessage(undefined) }} />}
         {/* <RecipeFormCard show={showForm} onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} item={selected} /> */}

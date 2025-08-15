@@ -23,34 +23,31 @@ function RecipeCard({ item, onEdit }: { item: Recipe, onEdit }) {
     const maxToggleHandler = () => {
         setIsMaximized((max) => !max);
     }
-    return <Card className={`card ${isMaximized && 'card-max'}`} variant='elevation'>
-        <CardContent>
-            {item.title}
-            <ul>
-                <li>
-                    Categories: {item.categories?.join(', ')}
-                </li>
-                <li>
-                    <IngredientsList items={item.ingredients} />
-                </li>
-                <li>
-                    Instructions: {item.instructions}
-                </li>
-            </ul>
+    return <Card onClick={maxToggleHandler} className={`card ${isMaximized && 'card-max'}`} variant='elevation'>
+        <CardContent className='card-content'>
+            <div className='card-title'>{item.title}</div>
+            <IngredientsDisplay items={item.ingredients} />
+            <InstructionsDisplay items={item.instructions} />
+            <CategoriesDisplay items={item.categories} />
         </CardContent>
-        <CardActions style={{ "justifyContent": "center" }}>
-            <Button onClick={onEdit}>Edit</Button>
-            <Button onClick={maxToggleHandler}>{isMaximized ? "Minimize" : "Maximize"}</Button>
+        <CardActions className="card-actions" >
+            <Button variant='outlined' onClick={onEdit}>Edit Recipe</Button>
         </CardActions>
     </Card >
 }
-
-
-function IngredientsList({ items }: { items: string[] }) {
-    return <>
-        Ingredients:
-        <ul>
-            {items?.map(x => <li>{x}</li>)}
-        </ul>
-    </>
+function CategoriesDisplay({ items }: { items }) {
+    return <i>{items?.join(', ')}</i>
+}
+function InstructionsDisplay({ item }: { item?: string }) {
+    return <div>
+        {item == undefined && <i>No instructions yet.</i> || "Instructions: " + item}
+    </div>
+}
+function IngredientsDisplay({ items = [] }: { items?: string[] }) {
+    return <div>
+        {(items?.length === 0) ? <i>No Ingredients yet.</i> : <>Ingredients: <ul>
+            {items?.map((ingredient, ix) => <li key={ix}>{ingredient}</li>)}
+        </ul></>
+        }
+    </div>
 }

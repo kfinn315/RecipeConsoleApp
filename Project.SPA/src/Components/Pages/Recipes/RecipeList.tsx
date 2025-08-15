@@ -11,7 +11,7 @@ import { useState } from 'react';
 export function RecipeList({ isLoading = false, recipes = [], onClick }: { isLoading: boolean, recipes: Recipe[]; onClick: (item: Recipe) => void | undefined; }) {
     return <>
         {isLoading ? "Loading!" :
-            <ul style={{ "textAlign": "left" }}>
+            <ul className="recipe-list">
                 {recipes.map(x => <RecipeItem item={x} onClick={onClick} />)}
             </ul>
         }

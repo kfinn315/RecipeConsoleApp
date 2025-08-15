@@ -1,30 +1,45 @@
 import './App.css'
-import Menu from './Components/Menu'
+import Menu, { type MenuOption } from './Components/Menu'
 import { useState } from 'react';
 import { RecipesPage } from './Components/Pages/Recipes/RecipesPage';
+import { Button, ThemeProvider } from '@mui/material';
+import { theme } from './Themes/Theme';
+import { CategoriesPage } from './Components/Pages/Categories/CategoriesPage';
 
 function App() {
-  const [content, setContent] = useState<JSX.Element | undefined>(<RecipesPage />);
-  function handleShow(element: JSX.Element) {
-    setContent(element);
+
+  const options: MenuOption[] = [
+    { name: "Recipes Table", page: <RecipesPage /> },
+    { name: "Recipes List", page: <RecipesPage variant="list" /> },
+    { name: "Recipes Cards", page: <RecipesPage variant="cards" /> },
+    { name: "Categories", page: <CategoriesPage /> },
+  ]
+
+  const [content, setContent] = useState<MenuOption>(options[0]);
+
+  function menuClickHandler(option: MenuOption) {
+    setContent(option);
   }
+
   return (
-    <div className={"container"}>
-      <div className='heading'>
-        <h1>
-          Recipe App
-        </h1>
-        <h2>Welcome!</h2>
+    <ThemeProvider theme={theme}>
+      <div className={"container"}>
+        <div className='heading'>
+          <h1>
+            Recipe App
+          </h1>
+          <Button variant='contained'>+ Add Recipe</Button>
+        </div>
+        <div className='menu'>
+          <Menu onClick={menuClickHandler} options={options} selected={content.name} />
+        </div>
+        <div className='content'>
+          <main>
+            {content.page}
+          </main>
+        </div>
       </div>
-      <div className='menu'>
-        <Menu show={handleShow} />
-      </div>
-      <div className='content'>
-        <main>
-          {content}
-        </main>
-      </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
