@@ -36,10 +36,6 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
 }
@@ -55,7 +51,6 @@
 }
 
 .heading {
-  /* padding-bottom: 2rem; */
   padding-inline: 2rem;
   display: flex;
   justify-content: space-between;
@@ -68,6 +63,7 @@
 
 .content {
   padding: 2rem;
+  overflow-y: scroll;
 
 }
 
@@ -102,12 +98,14 @@
 
 .menu-item>button {
   color: white;
+  width: 100%;
+  text-transform: none;
   /* background-color: black; */
 }
 
 .menu-item.menu-item-highlight>button {
-  color: black;
-  background-color: white;
+  /* color: black; */
+  background-color: #2196f3;
 }
 
 .list {
@@ -161,11 +159,11 @@
 }
 
 .card {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 15rem;
   height: 20rem;
+  padding: 0.5rem;
 }
 
 .card-content {
@@ -176,6 +174,7 @@
 .card-title {
   font-weight: bold;
   margin-bottom: 2rem;
+  font-size: xx-large;
 }
 
 .card-actions {
@@ -184,12 +183,36 @@
 
 .card-actions button {
   width: 100%;
+  overflow-y: scroll;
 }
 
-.recipes-page h3 {
+.recipes-page .title {
   text-align: left;
+  font-size: xx-large;
+  margin-top: 0;
 }
 
 .recipe-list {
   text-align: left;
 }
+
+.recipe-card-content {
+  cursor: pointer;
+}
+
+.recipe-dialog-detail .MuiPaper-root {
+  height: 25rem;
+}
+
+.recipe-dialog-detail .recipe-card-content {
+  cursor: unset;
+  width: unset;
+  height: unset;
+  padding: 1.4rem;
+}
+
+.recipe-dialog-detail .card-section {
+  padding-bottom: 2rem;
+}
+
+.recipe-dialog {}
