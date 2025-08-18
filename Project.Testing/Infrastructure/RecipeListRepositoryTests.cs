@@ -32,7 +32,7 @@ Update:
 public class RecipeListRepositoryTests
 {
     [Fact]
-    public async Task Test_List_Lists_Correct_Data()
+    public async Task GetListAsync_Returns_Correct_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
         var expected = new List<Recipe>() { new Recipe { Id = 0, Title = "my title", Ingredients = new List<string>(), Instructions = "", Categories = new List<int>() { 1, 254 } } };
@@ -45,7 +45,7 @@ public class RecipeListRepositoryTests
     }
 
     [Fact]
-    public async Task Test_Add_WritesCorrect_Data()
+    public async Task AddAsync_WritesCorrect_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
         List<Recipe>? writtenState = null;
@@ -56,5 +56,32 @@ public class RecipeListRepositoryTests
 
         Assert.NotNull(writtenState);
         Assert.Contains(recipe, writtenState);
+    }
+
+
+    [Fact]
+    public async Task AddAsync_Throws_ArgumentNullException_If_Item_IsNull()
+    {
+        // - throw ArgumentNullException if parameter `item` is null
+        var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
+        var repo = new RecipeListRepository(mockDataStorage.Object);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(() => repo.AddAsync(null));
+
+    }
+
+    [Fact]
+    public async Task AddAsync_Returns_Created()
+    {
+        // - returns `item` (w/ Id set)
+
+        var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
+        List<Recipe>? writtenState = null;
+        mockDataStorage.Setup(x => x.WriteDataAsync(It.IsAny<List<Recipe>>())).Callback<List<Recipe>>(x => writtenState = x);
+        var recipe = new Recipe { Title = "my title" };
+        var repo = new RecipeListRepository(mockDataStorage.Object);
+        var actual = await repo.AddAsync(recipe);
+
+        Assert.Equal(writtenState.First(), actual);
     }
 }

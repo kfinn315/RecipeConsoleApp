@@ -6,7 +6,7 @@ namespace Project.Testing.Integration;
 
 public class JsonDataStorageIntegrationTests : IDisposable
 {
-    string testFilePath = "./test_io_file_1.txt";
+    string testFilePath = "./io_file_1.txt";
 
     public JsonDataStorageIntegrationTests()
     {
@@ -18,7 +18,7 @@ public class JsonDataStorageIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Write_AndRead_Empty_RecipesListAsync()
+    public async Task Can_Write_AndRead_Empty_RecipesListAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<IEnumerable<Recipe>>(testFilePath);
         var recipes = new List<Recipe>();
@@ -29,7 +29,7 @@ public class JsonDataStorageIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Write_AndRead_RecipesListAsync()
+    public async Task Can_Write_AndRead_RecipesListAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<IEnumerable<Recipe>>(testFilePath);
         var recipes = new List<Recipe>() { { new Recipe { Id = 0, Title = "MyRecipe", Ingredients = new List<string> { "i1", "i2" }, Instructions = "instructions000111" } } };
@@ -40,7 +40,7 @@ public class JsonDataStorageIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Write_AndRead_NullAsync()
+    public async Task Can_Write_AndRead_NullAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<IEnumerable<Recipe>>(testFilePath);
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -52,7 +52,7 @@ public class JsonDataStorageIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Write_AndRead_CategoriesAsync()
+    public async Task Can_Write_AndRead_CategoriesAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<IEnumerable<Category>>(testFilePath);
         var categories = new List<Category>() { { new Category { Id = 0, Name = "MyCategory0" } }, new Category { Id = 1, Name = "MyCategory1" } };

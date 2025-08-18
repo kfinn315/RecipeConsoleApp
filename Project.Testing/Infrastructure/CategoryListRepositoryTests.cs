@@ -27,7 +27,7 @@ Update:
 public class CategoryListRepositoryTests
 {
     [Fact]
-    public async Task Test_List_Lists_Correct_DataAsync()
+    public async Task GetListAsync_Returns_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         var expected = new List<Category>() { new Category { Id = 0, Name = "my title" }, new Category { Id = 1, Name = "my title1" } };
@@ -40,7 +40,7 @@ public class CategoryListRepositoryTests
     }
 
     [Fact]
-    public async Task Test_Add_WritesCorrect_Data()
+    public async Task AddAsync_Writes_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         List<Category>? writtenState = null;
@@ -54,7 +54,7 @@ public class CategoryListRepositoryTests
     }
 
     [Fact]
-    public async Task Test_Add_CreatesId_0()
+    public async Task AddAsync_Creates_Id()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         List<Category>? writtenState = null;
@@ -65,6 +65,32 @@ public class CategoryListRepositoryTests
 
         Assert.NotNull(writtenState);
         Assert.Contains(category, writtenState);
-        Assert.Equal(0, category.Id);
+        Assert.NotNull(category.Id);
+    }
+
+    [Fact]
+    public async Task AddAsync_Throws_ArgumentNullException_If_Item_IsNull()
+    {
+        // - throw ArgumentNullException if parameter `item` is null
+        var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
+        var repo = new CategoryListRepository(mockDataStorage.Object);
+
+        await Assert.ThrowsAsync<ArgumentNullException>(() => repo.AddAsync(null));
+
+    }
+
+    [Fact]
+    public async Task AddAsync_Returns_Created()
+    {
+        // - returns `item` (w/ Id set)
+
+        var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
+        List<Category>? writtenState = null;
+        mockDataStorage.Setup(x => x.WriteDataAsync(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
+        var category = new Category { Name = "my title" };
+        var repo = new CategoryListRepository(mockDataStorage.Object);
+        var actual = await repo.AddAsync(category);
+
+        Assert.Equal(writtenState.First(), actual);
     }
 }

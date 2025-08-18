@@ -9,7 +9,7 @@ namespace Project.Testing.Integration;
 
 public class CategoriesRepositoryIntegrationTests : IDisposable
 {
-    string testFilePath = "./test_io_file_0.txt";
+    string testFilePath = "./io_file_0.txt";
 
     public CategoriesRepositoryIntegrationTests()
     {
@@ -21,7 +21,7 @@ public class CategoriesRepositoryIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Write_RecipesListAsync()
+    public async Task Can_Write_RecipesListAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<List<Recipe>>(testFilePath);
         var repository = new RecipeListRepository(jsonDataStorage);
@@ -37,7 +37,7 @@ public class CategoriesRepositoryIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task Test_Can_Read_RecipesListAsync()
+    public async Task Can_Read_RecipesListAsync()
     {
         var recipe = new Recipe { Id = 0, Title = "recipe1", Ingredients = new List<string> { "i0", "i1", "i2" }, Instructions = "Do this do that" };
         using (var streamWriter = new StreamWriter(testFilePath, new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.Create }))
