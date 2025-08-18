@@ -1,5 +1,4 @@
 import type React from 'react';
-import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useRecipes } from '../../Hooks/useRecipes';
 import { RecipeTable } from './RecipeTable';
@@ -8,7 +7,8 @@ import { ErrorBanner } from '../../ErrorBanner';
 import { useCategories } from '../../Hooks/useCategories';
 import { RecipeList } from './RecipeList';
 import { RecipeFormDialog } from './Form/RecipeFormDialog';
-import { RecipeCards } from './RecipeCards';
+import { RecipeCards } from './Card/RecipeCards';
+import { RecipeDialog } from './RecipeDialog';
 
 /**
  * shows a list of Recipes
@@ -18,15 +18,23 @@ import { RecipeCards } from './RecipeCards';
  */
 export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" | "cards" }) {
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [showDetail, setShowDetail] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>(undefined);
     const { isLoading, recipes, editRecipe, addRecipe } = useRecipes();
     const { isLoading: isLoadingCategories, categories } = useCategories();
 
-    const handleClick: (item: Recipe) => void = (item) => {
+    const handleEdit: (item: Recipe) => void = (item) => {
         setSelected(item);
         setShowForm(true);
     }
+
+
+    const handleDetailClick: (item: Recipe) => void = (item) => {
+        setSelected(item);
+        setShowDetail(item);
+    }
+
 
     const handleSubmit = (item: Recipe) => {
         setShowForm(false);
@@ -51,19 +59,20 @@ export function RecipesPage({ variant = "table" }: { variant?: "list" | "table" 
 
     const getRecipes = (variant) => {
         switch (variant) {
-            case 'list': return <RecipeList recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
-            case 'cards': return <RecipeCards recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
+            case 'list': return <RecipeList recipes={recipes} isLoading={isLoading} onClick={handleEdit} />;
+            case 'cards': return <RecipeCards recipes={recipes} isLoading={isLoading} onEdit={handleEdit} onClick={handleDetailClick} />;
             case 'table':
-            default: return <RecipeTable recipes={recipes} isLoading={isLoading} onClick={handleClick} />;
+            default: return <RecipeTable recipes={recipes} isLoading={isLoading} onClick={handleEdit} />;
         }
     }
 
     return <div className="recipes-page">
-        <h3>Recipes ({recipes?.length ?? 0})</h3>
+        <h3 className={"title"}>Recipes ({recipes?.length ?? 0})</h3>
         {(isLoading || isLoadingCategories) && "Loading..."}
         {errorMessage && <ErrorBanner message={errorMessage} onClose={() => { setErrorMessage(undefined) }} />}
         {/* <RecipeFormCard show={showForm} onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} item={selected} /> */}
         <RecipeFormDialog show={showForm} onClose={handleFormClose} onSubmit={handleSubmit} categories={categories} item={selected} />
+        <RecipeDialog item={selected} open={showDetail} onClose={() => { setShowDetail((show) => !show) }} onEdit={() => { handleEdit(selected); setShowDetail(false); }} />
         {getRecipes(variant)}
     </div>
 }
