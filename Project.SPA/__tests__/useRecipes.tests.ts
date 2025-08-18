@@ -4,14 +4,17 @@
  * isLoading is true when request for recipes is pending
  * recipes is undefined when get request is pending
  * recipes holds the list of recipes from API
+ * catches errors from Client.ts and sets errorMessage with response.message
+ * sets isLoading to false after request from Client.ts is resolved
  */
 
+import { Client } from "../src/Client/Client";
 import { useRecipes } from "../src/Components/Hooks/useRecipes";
 import type { Recipe } from "../src/Types";
-
 import { act, renderHook, waitFor } from "@testing-library/react"
 
 describe("useRecipes", () => {
+
     beforeEach(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn();
@@ -65,11 +68,39 @@ describe("useRecipes", () => {
         });
     });
 
+
     describe("editRecipe", () => {
-        it("sends edited recipe to API as json using PUT", async () => {
+        let clientInstance: Client;
+
+        beforeEach(() => {
+            // Reset all mocks before each test
+            jest.clearAllMocks();
+
+            clientInstance = new Client(""); // Create a real instance of the Client class
+        });
+
+        it("updates the edited recipe in recipes list", async () => {
+            const mockEditedRecipe: Recipe = { id: 0, title: "title0", categories: [], ingredients: [], instructions: "" }
+            const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
+            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "updateRecipe").mockResolvedValueOnce(mockEditedRecipe);
+
+            const { result } = renderHook(() => useRecipes(clientInstance));
+            // Wait for the recipes to load
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            // Perform editRecipe action
+            await act(() => {
+                result.current.editRecipe(mockEditedRecipe);
+            });
+
+            expect(result.current.recipes).toContain(mockEditedRecipe);
+        });
+        it("sends edited recipe to fetch() as json, method PUT", async () => {
             const mockEditedRecipe: Recipe = { id: 1, title: 'Edited Recipe', categories: [0], ingredients: ["ingredient2"], instructions: "new instructions" };
             const initialRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            const updatedRecipes: Recipe[] = [...initialRecipes, mockEditedRecipe];
 
             const fetchMock = jest.fn()
                 // Initial GET request to load recipes
@@ -84,12 +115,6 @@ describe("useRecipes", () => {
                     ok: true,
                     json: async () => mockEditedRecipe
                 })
-                // Subsequent GET request to fetch updated recipes
-                .mockResolvedValueOnce({
-                    status: 200,
-                    ok: true,
-                    json: async () => updatedRecipes
-                });
 
             global.fetch = fetchMock;
 
@@ -114,59 +139,6 @@ describe("useRecipes", () => {
                     body: JSON.stringify(mockEditedRecipe)
                 })
             );
-        });
-
-        it("requests list after editRecipe response ", async () => {
-            const mockEditedRecipe: Recipe = { id: 1, title: 'Edited Recipe', categories: [0], ingredients: ["ingredient2"], instructions: "new instructions" };
-            const initialRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            const updatedRecipes: Recipe[] = [...initialRecipes, mockEditedRecipe];
-
-            const fetchMock = jest.fn()
-                // Initial GET request to load recipes
-                .mockResolvedValueOnce({
-                    status: 200,
-                    ok: true,
-                    json: async () => initialRecipes
-                })
-                // PUT request to edit the recipe
-                .mockResolvedValueOnce({
-                    status: 200,
-                    ok: true,
-                    json: async () => mockEditedRecipe
-                })
-                // Subsequent GET request to fetch updated recipes
-                .mockResolvedValueOnce({
-                    status: 200,
-                    ok: true,
-                    json: async () => updatedRecipes
-                });
-
-            global.fetch = fetchMock;
-
-            const { result } = renderHook(() => useRecipes());
-
-            // Wait for initial recipes to load
-            await waitFor(() => {
-                expect(result.current.isLoading).toBe(false);
-            });
-            expect(result.current.recipes).toEqual(initialRecipes);
-
-            // Perform editRecipe action
-            await act(() => {
-                result.current.editRecipe(mockEditedRecipe);
-            });
-
-            // Wait for updated recipes to load
-            await waitFor(() => {
-                expect(result.current.isLoading).toBe(false);
-            });
-            expect(result.current.recipes).toEqual(updatedRecipes);
-
-            // Verify fetch calls
-            expect(fetchMock).toHaveBeenCalledTimes(3);
-            expect(fetchMock).toHaveBeenNthCalledWith(1, expect.stringMatching(/recipes$/), expect.objectContaining({ method: "GET" }));
-            expect(fetchMock).toHaveBeenNthCalledWith(2, expect.stringMatching(/recipes$/), expect.objectContaining({ method: "PUT" }));
-            expect(fetchMock).toHaveBeenNthCalledWith(3, expect.stringMatching(/recipes$/), expect.objectContaining({ method: "GET" }));
         });
     });
 });

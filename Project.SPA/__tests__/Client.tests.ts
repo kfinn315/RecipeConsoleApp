@@ -113,7 +113,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editCategory(mockData)).resolves.toBe(undefined);
+                expect(client.updateCategory(mockData)).resolves.toBe(undefined);
                 expect((fetch as jest.Mock).mock.lastCall[0]).toEqual(baseUrl + "/categories")
                 expect((fetch as jest.Mock).mock.lastCall[1]).toHaveProperty("body", JSON.stringify(mockData))
             })
@@ -124,7 +124,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editCategory(mockData)).rejects.toThrow(Error("error message"));
+                expect(client.updateCategory(mockData)).rejects.toThrow(Error("error message"));
             });
             it("throws statusText error when fetchResponse.ok is false", async () => {
                 const baseUrl = "http://localhost:5023";
@@ -138,7 +138,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editCategory(mockData)).rejects.toThrow(Error(statusText));
+                expect(client.updateCategory(mockData)).rejects.toThrow(Error(statusText));
             });
         })
     });
@@ -237,7 +237,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editRecipe(mockData)).resolves.toBe(undefined);
+                expect(client.updateRecipe(mockData)).resolves.toBe(undefined);
                 expect((fetch as jest.Mock).mock.lastCall[0]).toEqual(baseUrl + "/recipes")
                 expect((fetch as jest.Mock).mock.lastCall[1]).toHaveProperty("body", JSON.stringify(mockData))
             })
@@ -248,7 +248,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editRecipe(mockData)).rejects.toThrow(Error("error message"));
+                expect(client.updateRecipe(mockData)).rejects.toThrow(Error("error message"));
             });
             it("throws statusText error when fetchResponse.ok is false", async () => {
                 const baseUrl = "http://localhost:5023";
@@ -262,7 +262,7 @@ describe("Client", () => {
 
                 const client = new Client(baseUrl);
 
-                expect(client.editRecipe(mockData)).rejects.toThrow(Error(statusText));
+                expect(client.updateRecipe(mockData)).rejects.toThrow(Error(statusText));
             });
         })
     });
