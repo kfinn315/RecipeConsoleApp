@@ -1,6 +1,3 @@
-
-
-
 using Moq;
 using Project.Core.Entities;
 using Project.Core.Interfaces;
@@ -27,45 +24,44 @@ Update:
 - writes parameter `item` to datastorage, removing previous item from storage w/ the id
 */
 
-
 public class CategoryListRepositoryTests
 {
     [Fact]
-    public void Test_List_Lists_Correct_Data()
+    public async Task Test_List_Lists_Correct_DataAsync()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
-        var expected = new List<Category>() { new Category { Id = 0, Name = "my title" } };
-        mockDataStorage.Setup(x => x.ReadData()).Returns(expected);
+        var expected = new List<Category>() { new Category { Id = 0, Name = "my title" }, new Category { Id = 1, Name = "my title1" } };
+        mockDataStorage.Setup(x => x.ReadDataAsync()).ReturnsAsync(expected);
         var repo = new CategoryListRepository(mockDataStorage.Object);
 
-        var actual = repo.List();
+        var actual = await repo.GetListAsync();
 
         Assert.Equivalent(expected, actual);
     }
 
     [Fact]
-    public void Test_Add_WritesCorrect_Data()
+    public async Task Test_Add_WritesCorrect_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         List<Category>? writtenState = null;
-        mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
+        mockDataStorage.Setup(x => x.WriteDataAsync(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
         var category = new Category { Id = 3, Name = "my title" };
         var repo = new CategoryListRepository(mockDataStorage.Object);
-        repo.Add(category);
+        await repo.AddAsync(category);
 
         Assert.NotNull(writtenState);
         Assert.Contains(category, writtenState);
     }
 
     [Fact]
-    public void Test_Add_CreatesId_0()
+    public async Task Test_Add_CreatesId_0()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Category>>>();
         List<Category>? writtenState = null;
-        mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
+        mockDataStorage.Setup(x => x.WriteDataAsync(It.IsAny<List<Category>>())).Callback<List<Category>>(x => writtenState = x);
         var category = new Category { Name = "my title" };
         var repo = new CategoryListRepository(mockDataStorage.Object);
-        repo.Add(category);
+        await repo.AddAsync(category);
 
         Assert.NotNull(writtenState);
         Assert.Contains(category, writtenState);

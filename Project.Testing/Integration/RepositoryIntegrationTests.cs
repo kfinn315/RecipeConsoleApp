@@ -21,12 +21,12 @@ public class CategoriesRepositoryIntegrationTests : IDisposable
     }
 
     [Fact]
-    public void Test_Can_Write_RecipesList()
+    public async Task Test_Can_Write_RecipesListAsync()
     {
         var jsonDataStorage = new JsonFileDataStorage<List<Recipe>>(testFilePath);
         var repository = new RecipeListRepository(jsonDataStorage);
         var recipe = new Recipe { Id = 0, Title = "recipe1", Ingredients = new List<string> { "i0", "i1", "i2" }, Instructions = "Do this do that" };
-        repository.Add(recipe);
+        await repository.AddAsync(recipe);
 
 
         using var streamReader = new StreamReader(testFilePath, new FileStreamOptions() { Access = FileAccess.Read, Mode = FileMode.Open });
@@ -37,7 +37,7 @@ public class CategoriesRepositoryIntegrationTests : IDisposable
     }
 
     [Fact]
-    public void Test_Can_Read_RecipesList()
+    public async Task Test_Can_Read_RecipesListAsync()
     {
         var recipe = new Recipe { Id = 0, Title = "recipe1", Ingredients = new List<string> { "i0", "i1", "i2" }, Instructions = "Do this do that" };
         using (var streamWriter = new StreamWriter(testFilePath, new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.Create }))
@@ -48,7 +48,7 @@ public class CategoriesRepositoryIntegrationTests : IDisposable
         var jsonDataStorage = new JsonFileDataStorage<List<Recipe>>(testFilePath);
         var repository = new RecipeListRepository(jsonDataStorage);
 
-        var actualRecipes = repository.List();
+        var actualRecipes = await repository.GetListAsync();
         Assert.Equivalent(recipe, actualRecipes?.FirstOrDefault());
     }
 }

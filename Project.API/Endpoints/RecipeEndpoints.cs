@@ -7,20 +7,19 @@ public static class RecipeEndpoints
 {
     public static void Map(WebApplication app)
     {
-        app.MapGet("recipes/", (IRepository<Recipe> repository) =>
+        app.MapGet("recipes/", async (IRepository<Recipe> repository) =>
         {
-            return Results.Ok(repository.List());
+            return Results.Ok(await repository.GetListAsync());
         }).WithOpenApi();
 
-        app.MapPost("recipes/", (Recipe recipe, IRepository<Recipe> repository) =>
+        app.MapPost("recipes/", async (Recipe recipe, IRepository<Recipe> repository) =>
         {
-
-            repository.Add(recipe);
+            await repository.AddAsync(recipe);
             return Results.Ok(recipe);
         });
-        app.MapPut("recipes/", (Recipe recipe, IRepository<Recipe> repository) => //edit
+        app.MapPut("recipes/", async (Recipe recipe, IRepository<Recipe> repository) => //edit
             {
-                repository.Update(recipe);
+                await repository.UpdateAsync(recipe);
                 return Results.Ok(recipe);
             });
     }

@@ -3,8 +3,6 @@ using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
 
-//Make these methods Async - they read and write from filesystem which can take time
-
 public class RecipeListRepository : IRepository<Recipe>
 {
     private readonly IDataStorage<List<Recipe>> dataStorage;
@@ -12,35 +10,35 @@ public class RecipeListRepository : IRepository<Recipe>
     {
         this.dataStorage = dataStorage;
     }
-    private List<Recipe> Read()
+    private async Task<List<Recipe>> ReadAsync()
     {
-        return dataStorage.ReadData() ?? new List<Recipe>();
+        return await dataStorage.ReadDataAsync() ?? new List<Recipe>();
     }
-    private void Write(List<Recipe> recipes)
+    private async Task WriteAsync(List<Recipe> recipes)
     {
         Console.WriteLine("Writing recipes to storage");
-        dataStorage.WriteData(recipes);
+        await dataStorage.WriteDataAsync(recipes);
     }
-    public Recipe Add(Recipe item)
+    public async Task<Recipe> AddAsync(Recipe item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        var recipes = Read();
+        var recipes = await ReadAsync();
         item.Id = recipes.Count;
         recipes.Add(item);
-        Write(recipes);
+        await WriteAsync(recipes);
         return item;
     }
 
-    public void Update(Recipe item)
+    public async Task UpdateAsync(Recipe item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        var recipes = Read();
+        var recipes = await ReadAsync();
         recipes[recipes.IndexOf(recipes.First(x => x.Id == item.Id))] = item;
-        Write(recipes);
+        await WriteAsync(recipes);
     }
 
-    public IEnumerable<Recipe> List()
+    public async Task<IEnumerable<Recipe>> GetListAsync()
     {
-        return Read();
+        return await ReadAsync();
     }
 }

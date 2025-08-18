@@ -15,11 +15,11 @@ public class JsonFileDataStorage<T> : IDataStorage<T>
         this.path = path;
     }
 
-    public T? ReadData()
+    public async Task<T?> ReadDataAsync()
     {
         using var streamReader = new StreamReader(path, new FileStreamOptions() { Access = FileAccess.Read, Mode = FileMode.OpenOrCreate });
 
-        var json = streamReader.ReadToEnd();
+        var json = await streamReader.ReadToEndAsync();
         if (string.IsNullOrEmpty(json))
         {
             //empty
@@ -36,10 +36,10 @@ public class JsonFileDataStorage<T> : IDataStorage<T>
         }
     }
 
-    public void WriteData(T data)
+    public async Task WriteDataAsync(T data)
     {
         using var streamWriter = new StreamWriter(path, new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.Create });
         var json = JsonSerializer.Serialize<T>(data);
-        streamWriter.Write(json);
+        await streamWriter.WriteAsync(json);
     }
 }

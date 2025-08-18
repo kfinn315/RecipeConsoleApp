@@ -1,6 +1,7 @@
 
 
 
+using System.Threading.Tasks;
 using Moq;
 using Project.Core.Entities;
 using Project.Core.Interfaces;
@@ -31,27 +32,27 @@ Update:
 public class RecipeListRepositoryTests
 {
     [Fact]
-    public void Test_List_Lists_Correct_Data()
+    public async Task Test_List_Lists_Correct_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
         var expected = new List<Recipe>() { new Recipe { Id = 0, Title = "my title", Ingredients = new List<string>(), Instructions = "", Categories = new List<int>() { 1, 254 } } };
-        mockDataStorage.Setup(x => x.ReadData()).Returns(expected);
+        mockDataStorage.Setup(x => x.ReadDataAsync()).ReturnsAsync(expected);
         var repo = new RecipeListRepository(mockDataStorage.Object);
 
-        var actual = repo.List();
+        var actual = await repo.GetListAsync();
 
         Assert.Equivalent(expected, actual);
     }
 
     [Fact]
-    public void Test_Add_WritesCorrect_Data()
+    public async Task Test_Add_WritesCorrect_Data()
     {
         var mockDataStorage = new Mock<IDataStorage<List<Recipe>>>();
         List<Recipe>? writtenState = null;
-        mockDataStorage.Setup(x => x.WriteData(It.IsAny<List<Recipe>>())).Callback<List<Recipe>>(x => writtenState = x);
+        mockDataStorage.Setup(x => x.WriteDataAsync(It.IsAny<List<Recipe>>())).Callback<List<Recipe>>(x => writtenState = x);
         var recipe = new Recipe { Id = 0, Title = "my title", Ingredients = new List<string>(), Instructions = "", Categories = new List<int>() { 1, 2 } };
         var repo = new RecipeListRepository(mockDataStorage.Object);
-        repo.Add(recipe);
+        await repo.AddAsync(recipe);
 
         Assert.NotNull(writtenState);
         Assert.Contains(recipe, writtenState);

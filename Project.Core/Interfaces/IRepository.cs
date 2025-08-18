@@ -2,7 +2,7 @@ namespace Project.Core.Interfaces;
 
 public interface IRepository<T>
 {
-    IEnumerable<T> List();
-    T Add(T item);
-    void Update(T item);
+    Task<IEnumerable<T>> GetListAsync();
+    Task<T> AddAsync(T item);
+    Task UpdateAsync(T item);
 }

@@ -1,9 +1,8 @@
+using System.Threading.Tasks;
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
-
-//Make these methods Async - they read and write from filesystem which can take time
 
 public class CategoryListRepository : IRepository<Category>
 {
@@ -13,36 +12,36 @@ public class CategoryListRepository : IRepository<Category>
     {
         this.dataStorage = dataStorage;
     }
-    private List<Category> Read()
+    private async Task<List<Category>> ReadAsync()
     {
-        return dataStorage.ReadData() ?? new List<Category>();
+        return await dataStorage.ReadDataAsync() ?? new List<Category>();
     }
-    private void Write(List<Category> categories)
+    private async Task WriteAsync(List<Category> categories)
     {
         Console.WriteLine("Writing categories to storage");
-        dataStorage.WriteData(categories);
+        await dataStorage.WriteDataAsync(categories);
     }
-    public Category Add(Category item)
+    public async Task<Category> AddAsync(Category item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        var categories = Read();
+        var categories = await ReadAsync();
         item.Id = categories.Count;
         categories.Add(item);
-        Write(categories);
+        await WriteAsync(categories);
         return item;
     }
 
-    public void Update(Category item)
+    public async Task UpdateAsync(Category item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        var categories = Read();
+        var categories = await ReadAsync();
         categories.Add(item);
-        Write(categories);
+        await WriteAsync(categories);
     }
 
-    public IEnumerable<Category> List()
+    public async Task<IEnumerable<Category>> GetListAsync()
     {
-        return Read();
+        return await ReadAsync();
     }
 
 }

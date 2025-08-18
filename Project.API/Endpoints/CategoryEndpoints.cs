@@ -7,20 +7,20 @@ public static class CategoryEndpoints
 {
     public static void Map(WebApplication app)
     {
-        app.MapGet("categories/", (IRepository<Category> repository) =>
+        app.MapGet("categories/", async (IRepository<Category> repository) =>
         {
-            return Results.Ok(repository.List());
+            return Results.Ok(await repository.GetListAsync());
         }).WithOpenApi();
 
-        app.MapPost("categories/", (Category category, IRepository<Category> repository) =>
+        app.MapPost("categories/", async (Category category, IRepository<Category> repository) =>
         {
 
-            var newCategory = repository.Add(category);
+            var newCategory = await repository.AddAsync(category);
             return Results.Ok(newCategory);
         });
-        app.MapPut("categories/", (Category category, IRepository<Category> repository) => //edit
+        app.MapPut("categories/", async (Category category, IRepository<Category> repository) => //edit
             {
-                repository.Update(category);
+                await repository.UpdateAsync(category);
                 return Results.Ok(category);
             });
     }
