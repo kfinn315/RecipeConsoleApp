@@ -8,6 +8,25 @@ using Project.Infrastructure.Repositories;
 using Xunit;
 
 namespace Project.UnitTests.Infrastructure;
+/*
+Reads and writes Category data to dataStorage
+// Read:
+// - does not return null, returns an empty list if datastorage returns null
+// - returns list of items from datastorage
+// - what if datastorage returns incorrect data type? return empty list
+// Write:
+// - writes list of categories to datastorage
+// - if parameter `categories` is null, writes empty list to datastorage
+Add:
+- throw ArgumentNullException if parameter `item` is null
+- assigns Id to parameter category
+- writes parameter `item` to datastorage
+- returns `item` (w/ Id set)
+Update:
+- throw ArgumentNullException if parameter `item` is null
+- writes parameter `item` to datastorage, removing previous item from storage w/ the id
+*/
+
 
 public class CategoryListRepositoryTests
 {

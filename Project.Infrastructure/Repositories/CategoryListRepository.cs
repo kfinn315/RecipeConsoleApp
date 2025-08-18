@@ -1,8 +1,9 @@
-
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
+
+//Make these methods Async - they read and write from filesystem which can take time
 
 public class CategoryListRepository : IRepository<Category>
 {
@@ -21,19 +22,19 @@ public class CategoryListRepository : IRepository<Category>
         Console.WriteLine("Writing categories to storage");
         dataStorage.WriteData(categories);
     }
-    public void Add(Category item)
+    public Category Add(Category item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         var categories = Read();
-        if (item.Id == null)
-        {
-            item.Id = categories.Count;
-        }
+        item.Id = categories.Count;
         categories.Add(item);
         Write(categories);
+        return item;
     }
 
-    public void Edit(Category item)
+    public void Update(Category item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         var categories = Read();
         categories.Add(item);
         Write(categories);

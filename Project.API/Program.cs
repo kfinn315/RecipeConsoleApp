@@ -1,6 +1,7 @@
 using Project.API.Endpoints;
 using Project.API.Extensions;
 
+//TODO put these in config
 string SPA_URL = "http://localhost:5173";
 string JSON_DATA_PATH = "./Data";
 

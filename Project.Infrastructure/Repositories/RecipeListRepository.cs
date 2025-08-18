@@ -1,8 +1,9 @@
-
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
+
+//Make these methods Async - they read and write from filesystem which can take time
 
 public class RecipeListRepository : IRepository<Recipe>
 {
@@ -20,16 +21,19 @@ public class RecipeListRepository : IRepository<Recipe>
         Console.WriteLine("Writing recipes to storage");
         dataStorage.WriteData(recipes);
     }
-    public void Add(Recipe item)
+    public Recipe Add(Recipe item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         var recipes = Read();
         item.Id = recipes.Count;
         recipes.Add(item);
         Write(recipes);
+        return item;
     }
 
-    public void Edit(Recipe item)
+    public void Update(Recipe item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         var recipes = Read();
         recipes[recipes.IndexOf(recipes.First(x => x.Id == item.Id))] = item;
         Write(recipes);

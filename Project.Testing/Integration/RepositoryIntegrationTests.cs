@@ -9,7 +9,7 @@ namespace Project.Testing.Integration;
 
 public class CategoriesRepositoryIntegrationTests : IDisposable
 {
-    string testFilePath = "./test_io_file.txt";
+    string testFilePath = "./test_io_file_0.txt";
 
     public CategoriesRepositoryIntegrationTests()
     {

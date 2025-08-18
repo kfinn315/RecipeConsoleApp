@@ -3,6 +3,6 @@ namespace Project.Core.Interfaces;
 public interface IRepository<T>
 {
     IEnumerable<T> List();
-    void Add(T item);
-    void Edit(T item);
+    T Add(T item);
+    void Update(T item);
 }

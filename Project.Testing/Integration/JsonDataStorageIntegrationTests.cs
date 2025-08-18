@@ -6,7 +6,7 @@ namespace Project.Testing.Integration;
 
 public class JsonDataStorageIntegrationTests : IDisposable
 {
-    string testFilePath = "./test_io_file.txt";
+    string testFilePath = "./test_io_file_1.txt";
 
     public JsonDataStorageIntegrationTests()
     {
@@ -55,10 +55,10 @@ public class JsonDataStorageIntegrationTests : IDisposable
     public void Test_Can_Write_AndRead_Categories()
     {
         var jsonDataStorage = new JsonFileDataStorage<IEnumerable<Category>>(testFilePath);
-        var recipes = new List<Category>() { { new Category { Id = 0, Name = "MyCategory0" } }, new Category { Id = 1, Name = "MyCategory1" } };
-        jsonDataStorage.WriteData(recipes);
-        var actualRecipes = jsonDataStorage.ReadData();
+        var categories = new List<Category>() { { new Category { Id = 0, Name = "MyCategory0" } }, new Category { Id = 1, Name = "MyCategory1" } };
+        jsonDataStorage.WriteData(categories);
+        var actualCategories = jsonDataStorage.ReadData();
 
-        Assert.Equivalent(recipes, actualRecipes);
+        Assert.Equivalent(categories, actualCategories);
     }
 }

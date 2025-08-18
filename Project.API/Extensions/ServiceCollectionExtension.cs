@@ -9,8 +9,8 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection RegisterJsonFileRepositories(this IServiceCollection services, string path)
     {
-        services.AddTransient<IRepository<Category>>(serviceProvider => new CategoryListRepository(new JsonFileDataStorage<List<Category>>(path + "/category.json")));
-        services.AddTransient<IRepository<Recipe>>(serviceProvider => new RecipeListRepository(new JsonFileDataStorage<List<Recipe>>(path + "/recipe.json")));
+        services.AddTransient<IRepository<Category>>(serviceProvider => new CategoryListRepository(new JsonFileDataStorage<List<Category>>($"{path}/category.json")));
+        services.AddTransient<IRepository<Recipe>>(serviceProvider => new RecipeListRepository(new JsonFileDataStorage<List<Recipe>>($"{path}/recipe.json")));
 
         return services;
     }
