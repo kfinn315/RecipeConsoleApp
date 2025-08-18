@@ -3,7 +3,7 @@ import Menu, { type MenuOption } from './Components/Menu'
 import { useState } from 'react';
 import { RecipesPage } from './Components/Pages/Recipes/RecipesPage';
 import { Button, ThemeProvider } from '@mui/material';
-import { theme } from './Themes/Theme';
+import { theme } from './Theme';
 import { CategoriesPage } from './Components/Pages/Categories/CategoriesPage';
 
 function App() {
