@@ -8,25 +8,35 @@ interface UseRecipes {
     recipes: Recipe[];
     addRecipe: (item: Recipe) => Promise<void>;
     editRecipe: (item: Recipe) => Promise<void>;
+    errorMessage?: string;
+    dismissErrorMessage: () => void;
 }
 
-export function useRecipes(): UseRecipes {
+export function useRecipes(client = new Client(baseUrl)): UseRecipes {
     const [recipes, setRecipes] = useState<Recipe[] | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         setIsLoading(true);
-        getRecipes().finally(() => { setIsLoading(false) });
+        getRecipes()
+            .catch((reason: Error) => { setErrorMessage(reason.message) })
+            .finally(() => { setIsLoading(false) });
     }, []);
 
-    const client = new Client(baseUrl);
     function addRecipe(item: Recipe): Promise<void> {
         setIsLoading(true);
-        return client.addRecipe(item).then((recipes) => { setRecipes(recipes); }).finally(() => { setIsLoading(false) });
+        return client.addRecipe(item)
+            .then((recipe: Recipe) => { setRecipes([...recipes, recipe]); })
+            .catch((reason: Error) => { setErrorMessage(reason.message) })
+            .finally(() => { setIsLoading(false) });
     }
     function editRecipe(item: Recipe): Promise<void> {
         setIsLoading(true);
-        return client.editRecipe(item).then((recipes) => { setRecipes(recipes); }).finally(() => { setIsLoading(false) });
+        return client.updateRecipe(item)
+            .then((recipe: Recipe) => { setRecipes([...recipes?.filter(x => x.id !== recipe.id) ?? [], recipe]); })
+            .catch((reason: Error) => { setErrorMessage(reason.message) })
+            .finally(() => { setIsLoading(false) });
     }
     function getRecipes() {
         return client.getRecipes().then(items => {
@@ -34,5 +44,9 @@ export function useRecipes(): UseRecipes {
         })
     }
 
-    return { isLoading, recipes, addRecipe, editRecipe }
+    function dismissErrorMessage() {
+        setErrorMessage(undefined);
+    }
+
+    return { errorMessage, isLoading, recipes, addRecipe, editRecipe, dismissErrorMessage }
 }

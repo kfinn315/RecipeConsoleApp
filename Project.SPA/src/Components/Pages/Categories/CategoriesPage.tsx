@@ -1,5 +1,4 @@
 import type React from 'react';
-import { useCategories } from '../../Hooks/useCategories';
 import { CategoryTable } from './CategoryTable';
 import { Button } from '@mui/material';
 import { useState } from 'react';
@@ -7,11 +6,7 @@ import type { Category } from '../../../Types/Category';
 import { CategoryForm } from './CategoryForm';
 import { ErrorBanner } from '../../ErrorBanner';
 
-
-
-export function CategoriesPage() {
-    const { isLoading, categories, addCategory, editCategory } = useCategories();
-
+export function CategoriesPage({ addCategory, categories, editCategory, isLoading }: { isLoading?: boolean, categories: Category[], addCategory, editCategory }) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>(undefined);

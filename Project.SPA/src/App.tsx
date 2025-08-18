@@ -1,24 +1,37 @@
 import './App.css'
-import Menu, { type MenuOption } from './Components/Menu'
+import Menu from './Components/Menu'
 import { useState } from 'react';
 import { RecipesPage } from './Components/Pages/Recipes/RecipesPage';
 import { Button, ThemeProvider } from '@mui/material';
 import { theme } from './Theme';
 import { CategoriesPage } from './Components/Pages/Categories/CategoriesPage';
+import { RecipeFormDialog } from './Components/Pages/Recipes/Form/RecipeFormDialog';
+import { useRecipes } from './Components/Hooks/useRecipes';
+import { useCategories } from './Components/Hooks/useCategories';
+import { ErrorBanner } from './Components/ErrorBanner';
 
 function App() {
 
-  const options: MenuOption[] = [
-    { name: "Recipes Table", page: <RecipesPage /> },
-    { name: "Recipes List", page: <RecipesPage variant="list" /> },
-    { name: "Recipes Cards", page: <RecipesPage variant="cards" /> },
-    { name: "Categories", page: <CategoriesPage /> },
-  ]
+  const options: string[] = ["Recipes", "Categories"]
 
-  const [content, setContent] = useState<MenuOption>(options[0]);
+  const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
+  const [content, setContent] = useState<string>(options[0]);
+  const { addRecipe, editRecipe, isLoading, recipes, errorMessage, dismissErrorMessage } = useRecipes();
+  const { addCategory, categories, editCategory, isLoading: isCategoryLoading } = useCategories();
 
-  function menuClickHandler(option: MenuOption) {
-    setContent(option);
+  function menuClickHandler(option: string) {
+    setContent(options.find(x => x == option));
+  }
+
+  const handleSubmit = (item: Recipe) => {
+    setShowAddDialog(false);
+    setTimeout(() => {
+      addRecipe(item);
+    }, 1000);
+  }
+
+  function handleAddDialogClose() {
+    setShowAddDialog(false);
   }
 
   return (
@@ -28,16 +41,21 @@ function App() {
           <h1>
             Recipe App
           </h1>
-          <Button variant='contained'>+ Add Recipe</Button>
+          <Button onClick={() => setShowAddDialog(true)} variant='contained'>+ Add Recipe</Button>
         </div>
         <div className='menu'>
-          <Menu onClick={menuClickHandler} options={options} selected={content.name} />
+          <Menu onClick={menuClickHandler} options={options} selected={content} />
         </div>
         <div className='content'>
           <main>
-            {content.page}
+            <ErrorBanner message={errorMessage} onClose={() => { dismissErrorMessage() }} />
+            {(content == "Recipes" &&
+              <RecipesPage variant="cards" addRecipe={addRecipe} editRecipe={editRecipe} categories={categories} isLoading={isLoading} recipes={recipes} />)
+              ||
+              <CategoriesPage addCategory={addCategory} categories={categories} editCategory={editCategory} isLoading={isCategoryLoading} />}
           </main>
         </div>
+        <RecipeFormDialog show={showAddDialog} onClose={handleAddDialogClose} onSubmit={handleSubmit} categories={categories} item={undefined} />
       </div>
     </ThemeProvider>
   )
