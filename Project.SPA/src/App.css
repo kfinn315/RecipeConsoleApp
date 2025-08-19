@@ -76,18 +76,18 @@
 
 }
 
-.menu-items {
+ul.menu-items {
   text-align: left;
   padding-left: 0px;
   margin-top: 5rem;
 }
 
-.menu-item {
+li.menu-item {
   list-style: none;
   margin-block: 1rem;
 }
 
-.menu-item .icon {
+li.menu-item .icon {
   width: 1rem;
   height: 1rem;
 }
@@ -137,8 +137,8 @@
 }
 
 .cards {
-  display: flex;
-  flex-flow: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   justify-content: center;
 }
@@ -161,7 +161,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: 15rem;
+  /* width: 15rem; */
   height: 20rem;
   padding: 0.5rem;
 }
@@ -189,7 +189,7 @@
 .recipes-page .title {
   text-align: left;
   font-size: xx-large;
-  margin-top: 0;
+  margin: 0px;
 }
 
 .recipe-list {
@@ -215,4 +215,37 @@
   padding-bottom: 2rem;
 }
 
-.recipe-dialog {}
+@media(width < 500px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .container {
+    display: unset;
+  }
+
+  .menu {
+    padding: unset;
+
+  }
+
+  ul.menu-items {
+    display: flex;
+    margin: 0px;
+    gap: 1rem;
+    padding-inline: 2rem;
+  }
+
+  li.menu-item {
+    display: inline;
+  }
+
+  .card {
+    height: 15rem;
+  }
+
+  .heading {
+    flex-direction: column;
+    align-items: center;
+  }
+}
