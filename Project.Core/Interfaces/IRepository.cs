@@ -1,8 +1,8 @@
 namespace Project.Core.Interfaces;
 
-public interface IRepository<T>: IDisposable
+public interface IRepository<T>
 {
-    IEnumerable<T> List();
-    void Add(T item);
-    void Edit(T item);
+    Task<IEnumerable<T>> GetListAsync();
+    Task<T> AddAsync(T item);
+    Task UpdateAsync(T item);
 }

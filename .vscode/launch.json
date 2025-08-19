@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "C#: API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Project.API/Project.API.csproj"
+        },
+        {
             "console": "integratedTerminal",
             "name": "CLI - Launch Terminal",
             "request": "launch",

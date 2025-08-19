@@ -44,7 +44,12 @@ public class RecipesCLI : IRecipesCLI
             AnsiConsole.WriteLine("No categories. Add a category first.");
             return null;
         }
-        return RecipeCLI.Create(categoryOptions);
+        string title = RecipeCLI.EnterTitle();
+        List<string> ingredients = RecipeCLI.EnterIngredients();
+        List<string>? categories = RecipeCLI.SelectCategories(categoryOptions);
+        string instructions = RecipeCLI.EnterInstructions();
+
+        return new Recipe { Categories = categories, Ingredients = ingredients, Title = title, Instructions = instructions };
     }
     public Recipe? Edit(IEnumerable<Category> categoryOptions, IEnumerable<Recipe> recipes)
     {

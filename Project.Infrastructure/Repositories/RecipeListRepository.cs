@@ -1,4 +1,3 @@
-
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
@@ -6,32 +5,40 @@ namespace Project.Infrastructure.Repositories;
 
 public class RecipeListRepository : IRepository<Recipe>
 {
-    private readonly List<Recipe> recipes;
-    private readonly IDataStorage<List<Recipe>> stateManager;
-    public RecipeListRepository(IDataStorage<List<Recipe>> manager)
+    private readonly IDataStorage<List<Recipe>> dataStorage;
+    public RecipeListRepository(IDataStorage<List<Recipe>> dataStorage)
     {
-        recipes = manager.ReadData() ?? new List<Recipe>();
-        stateManager = manager;
+        this.dataStorage = dataStorage;
     }
-    public void Add(Recipe item)
+    private async Task<List<Recipe>> ReadAsync()
     {
+        return await dataStorage.ReadDataAsync() ?? new List<Recipe>();
+    }
+    private async Task WriteAsync(List<Recipe> recipes)
+    {
+        Console.WriteLine("Writing recipes to storage");
+        await dataStorage.WriteDataAsync(recipes);
+    }
+    public async Task<Recipe> AddAsync(Recipe item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        var recipes = await ReadAsync();
         item.Id = recipes.Count;
         recipes.Add(item);
+        await WriteAsync(recipes);
+        return item;
     }
 
-    public void Edit(Recipe item)
+    public async Task UpdateAsync(Recipe item)
     {
+        ArgumentNullException.ThrowIfNull(item);
+        var recipes = await ReadAsync();
         recipes[recipes.IndexOf(recipes.First(x => x.Id == item.Id))] = item;
+        await WriteAsync(recipes);
     }
 
-    public IEnumerable<Recipe> List()
+    public async Task<IEnumerable<Recipe>> GetListAsync()
     {
-        return recipes;
+        return await ReadAsync();
     }
-
-    public void Dispose()
-    {
-        stateManager.WriteData(recipes);
-    }
-
 }

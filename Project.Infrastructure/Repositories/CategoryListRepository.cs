@@ -1,37 +1,47 @@
-
+using System.Threading.Tasks;
 using Project.Core.Entities;
 using Project.Core.Interfaces;
 
 namespace Project.Infrastructure.Repositories;
 
-public class CategoryListRepository : IRepository<Category>, IDisposable
+public class CategoryListRepository : IRepository<Category>
 {
-    private readonly List<Category> categories;
-    private readonly IDataStorage<List<Category>> stateManager;
+    private readonly IDataStorage<List<Category>> dataStorage;
 
-    public CategoryListRepository(IDataStorage<List<Category>> manager)
+    public CategoryListRepository(IDataStorage<List<Category>> dataStorage)
     {
-        categories = manager.ReadData() ?? new List<Category>();
-        stateManager = manager;
+        this.dataStorage = dataStorage;
     }
-    public void Add(Category item)
+    private async Task<List<Category>> ReadAsync()
     {
+        return await dataStorage.ReadDataAsync() ?? new List<Category>();
+    }
+    private async Task WriteAsync(List<Category> categories)
+    {
+        Console.WriteLine("Writing categories to storage");
+        await dataStorage.WriteDataAsync(categories);
+    }
+    public async Task<Category> AddAsync(Category item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        var categories = await ReadAsync();
         item.Id = categories.Count;
         categories.Add(item);
+        await WriteAsync(categories);
+        return item;
     }
 
-    public void Edit(Category item)
+    public async Task UpdateAsync(Category item)
     {
+        ArgumentNullException.ThrowIfNull(item);
+        var categories = await ReadAsync();
         categories.Add(item);
+        await WriteAsync(categories);
     }
 
-    public IEnumerable<Category> List()
+    public async Task<IEnumerable<Category>> GetListAsync()
     {
-        return categories;
+        return await ReadAsync();
     }
 
-    public void Dispose()
-    {
-        stateManager.WriteData(categories);
-    }
 }

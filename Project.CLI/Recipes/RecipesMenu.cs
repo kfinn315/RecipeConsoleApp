@@ -1,7 +1,6 @@
 using Project.CLI.Interfaces;
-using Project.CLI.Pages;
-using Project.Core.Entities;
-using Project.Core.Interfaces;
+using Project.CLI.Recipes.Pages;
+using Project.CLI.Client;
 
 namespace Project.CLI.Recipes;
 
@@ -10,42 +9,15 @@ namespace Project.CLI.Recipes;
 */
 public class RecipesMenu
 {
-    private readonly IRepository<Recipe> recipeRepository;
-    private readonly IRepository<Category> categoryRepository;
+    public IAsyncPage ListPage { get; }
+    public IAsyncPage AddPage { get; }
+    public IAsyncPage EditPage { get; }
 
-    public RecipesMenu(IRepository<Recipe> repository, IRepository<Category> categories, IRecipesCLI recipesCLI)
+
+    public RecipesMenu(IRecipeClient recipeClient, IRecipesCLI recipesCLI)
     {
-        recipeRepository = repository;
-        categoryRepository = categories;
-        this.ListPage = new Page("List Recipes", () =>
-        {
-            recipesCLI.List(recipeRepository.List());
-        });
-        this.AddPage = new Page("Add Recipe", () =>
-        {
-            var recipe = recipesCLI.Add(categoryRepository.List());
-            if (recipe != null)
-            {
-                recipeRepository.Add(recipe);
-            }
-        });
-        this.EditPage = new Page("Edit Recipe", () =>
-        {
-            var recipes = recipeRepository.List();
-            var categoryOptions = categoryRepository.List();
-
-            var editRecip = recipesCLI.Edit(categoryOptions, recipes);
-
-            if (editRecip != null)
-            {
-                recipeRepository.Edit(editRecip);
-            }
-        });
+        this.ListPage = new ListRecipePage(recipeClient, recipesCLI);
+        this.AddPage = new AddRecipePage(recipeClient, recipesCLI);
+        this.EditPage = new EditRecipePage(recipeClient, recipesCLI);
     }
-
-    public IPage ListPage { get; }
-    public IPage AddPage { get; }
-    public IPage EditPage { get; }
-
-
 }
