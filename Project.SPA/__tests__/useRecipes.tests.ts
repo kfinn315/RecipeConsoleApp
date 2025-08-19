@@ -36,8 +36,72 @@ describe("useRecipes", () => {
         await waitFor(() => { expect(result.current.isLoading).toBe(false) })
         expect(result.current.recipes).toBe(mockData);
     });
+    it("sets errorMessage for initial getRecipes error", async () => {
+        const mockErrorMessage = "this is the mock error message";
+        jest.spyOn(clientInstance, "getRecipes").mockRejectedValueOnce(new Error(mockErrorMessage));
 
+
+        const { result } = renderHook(() => useRecipes(clientInstance));
+        // Wait for the recipes to load
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        });
+
+        expect(result.current.errorMessage).toBe(mockErrorMessage);
+    });
     describe("addRecipe", () => {
+        let clientInstance: Client;
+
+        beforeEach(() => {
+            // Reset all mocks before each test
+            jest.clearAllMocks();
+
+            clientInstance = new Client(""); // Create a real instance of the Client class
+        });
+
+        it("sets errorMessage for addRecipe error", async () => {
+            const mockErrorMessage = "this is the mock error message";
+            const mockNewRecipe: Recipe = { id: undefined, title: "title0", categories: [], ingredients: [], instructions: "" }
+            const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
+            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "addRecipe").mockRejectedValueOnce(new Error(mockErrorMessage));
+
+            const { result } = renderHook(() => useRecipes(clientInstance));
+            // Wait for the recipes to load
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            // Perform addRecipe action
+            await act(() => {
+                result.current.addRecipe(mockNewRecipe);
+            });
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            expect(result.current.errorMessage).toBe(mockErrorMessage);
+        });
+
+        it("adds the new recipe in recipes list", async () => {
+            const mockNewRecipe: Recipe = { id: undefined, title: "title0", categories: [], ingredients: [], instructions: "" }
+            const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
+            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "addRecipe").mockResolvedValueOnce(mockNewRecipe);
+
+            const { result } = renderHook(() => useRecipes(clientInstance));
+            // Wait for the recipes to load
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            // Perform addRecipe action
+            await act(() => {
+                result.current.addRecipe(mockNewRecipe);
+            });
+
+            expect(result.current.recipes).toContain(mockNewRecipe);
+        });
         it("sends new recipe to API as json using POST", async () => {
             const mockData: Recipe = { id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" };
             const mockData2: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
@@ -78,7 +142,29 @@ describe("useRecipes", () => {
 
             clientInstance = new Client(""); // Create a real instance of the Client class
         });
+        it("sets errorMessage for editRecipe error", async () => {
+            const mockErrorMessage = "this is the mock error message";
+            const mockUpdateRecipe: Recipe = { id: 0, title: "title0", categories: [], ingredients: [], instructions: "" }
+            const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
+            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "updateRecipe").mockRejectedValueOnce(new Error(mockErrorMessage));
 
+            const { result } = renderHook(() => useRecipes(clientInstance));
+            // Wait for the recipes to load
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            // Perform addRecipe action
+            await act(() => {
+                result.current.editRecipe(mockUpdateRecipe);
+            });
+            await waitFor(() => {
+                expect(result.current.isLoading).toBe(false);
+            });
+
+            expect(result.current.errorMessage).toBe(mockErrorMessage);
+        });
         it("updates the edited recipe in recipes list", async () => {
             const mockEditedRecipe: Recipe = { id: 0, title: "title0", categories: [], ingredients: [], instructions: "" }
             const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
@@ -98,6 +184,7 @@ describe("useRecipes", () => {
 
             expect(result.current.recipes).toContain(mockEditedRecipe);
         });
+
         it("sends edited recipe to fetch() as json, method PUT", async () => {
             const mockEditedRecipe: Recipe = { id: 1, title: 'Edited Recipe', categories: [0], ingredients: ["ingredient2"], instructions: "new instructions" };
             const initialRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
