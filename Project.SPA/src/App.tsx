@@ -17,7 +17,7 @@ function App() {
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const [content, setContent] = useState<string>(options[0]);
   const { addRecipe, editRecipe, isLoading, recipes, errorMessage, dismissErrorMessage } = useRecipes();
-  const { addCategory, categories, editCategory, isLoading: isCategoryLoading } = useCategories();
+  const { addCategory, categories, editCategory, isLoading: isCategoryLoading, errorMessage: categoryErrorMessage, dismissErrorMessage: dismissCategoryErrorMessage } = useCategories();
 
   function menuClickHandler(option: string) {
     setContent(options.find(x => x == option));
@@ -48,6 +48,7 @@ function App() {
         </nav>
         <main className='content'>
           <ErrorBanner message={errorMessage} onClose={() => { dismissErrorMessage() }} />
+          <ErrorBanner message={categoryErrorMessage} onClose={() => { dismissCategoryErrorMessage() }} />
           {(content == "Recipes" &&
             <RecipesPage variant="cards" addRecipe={addRecipe} editRecipe={editRecipe} categories={categories} isLoading={isLoading} recipes={recipes} />)
             ||
