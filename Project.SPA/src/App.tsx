@@ -37,24 +37,22 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className={"container"}>
-        <div className='heading'>
+        <header className='heading'>
           <h1>
             Recipe App
           </h1>
           <Button onClick={() => setShowAddDialog(true)} variant='contained'>+ Add Recipe</Button>
-        </div>
-        <div className='menu'>
+        </header>
+        <nav className='menu'>
           <Menu onClick={menuClickHandler} options={options} selected={content} />
-        </div>
-        <div className='content'>
-          <main>
-            <ErrorBanner message={errorMessage} onClose={() => { dismissErrorMessage() }} />
-            {(content == "Recipes" &&
-              <RecipesPage variant="cards" addRecipe={addRecipe} editRecipe={editRecipe} categories={categories} isLoading={isLoading} recipes={recipes} />)
-              ||
-              <CategoriesPage addCategory={addCategory} categories={categories} editCategory={editCategory} isLoading={isCategoryLoading} />}
-          </main>
-        </div>
+        </nav>
+        <main className='content'>
+          <ErrorBanner message={errorMessage} onClose={() => { dismissErrorMessage() }} />
+          {(content == "Recipes" &&
+            <RecipesPage variant="cards" addRecipe={addRecipe} editRecipe={editRecipe} categories={categories} isLoading={isLoading} recipes={recipes} />)
+            ||
+            <CategoriesPage addCategory={addCategory} categories={categories} editCategory={editCategory} isLoading={isCategoryLoading} />}
+        </main>
         <RecipeFormDialog show={showAddDialog} onClose={handleAddDialogClose} onSubmit={handleSubmit} categories={categories} item={undefined} />
       </div>
     </ThemeProvider>

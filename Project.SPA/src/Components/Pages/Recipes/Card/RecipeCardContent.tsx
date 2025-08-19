@@ -12,20 +12,26 @@ export function RecipeCardContent({ item, onClick }: { item: Recipe, onClick }) 
 
 function CategoriesDisplay({ items = [] }: { items?: number[] }) {
     return <div className="card-section">
-        {items?.length == undefined && <i>No Categories.</i> || "Categories: "}
-        <i>{items?.join(', ')}</i>
-    </div>;
+        {/* Categories:&nbsp; */}
+        {/* {items?.length == undefined && <i>No Categories.</i>} */}
+        <ul>
+            {items.map(x => <li className="pill">{x}</li>)}
+        </ul>
+    </div >;
 }
 function InstructionsDisplay({ item }: { item?: string }) {
     return <div className="card-section">
-        {item == undefined && <i>No instructions yet.</i> || "Instructions: " + item}
+        Instructions:&nbsp;
+        <ul>
+            {item == undefined && <i>No instructions yet.</i> || <li>{item}</li>}
+        </ul>
     </div>
 }
 function IngredientsDisplay({ items = [] }: { items?: string[] }) {
     return <div className="card-section">
-        {(items?.length === 0) ? <i>No Ingredients yet.</i> : <>Ingredients: <ul>
-            {items?.map((ingredient, ix) => <li key={ix}>{ingredient}</li>)}
-        </ul></>
-        }
+        Ingredients:&nbsp;
+        <ul>
+            {(items?.length === 0) ? <i>No Ingredients yet.</i> : items?.map((ingredient, ix) => <li key={ix}>{ingredient}</li>)}
+        </ul>
     </div>
 }
