@@ -1,5 +1,8 @@
+using System.Runtime.CompilerServices;
 using Project.API.Endpoints;
 using Project.API.Extensions;
+
+[assembly: InternalsVisibleTo("Project.Testing")]
 
 //TODO put these in config
 string SPA_URL = "http://localhost:5173";
@@ -41,3 +44,7 @@ CategoryEndpoints.Map(app);
 RecipeEndpoints.Map(app);
 
 app.Run();
+
+
+
+public partial class Program {}

@@ -41,4 +41,16 @@ public class RecipeListRepository : IRepository<Recipe>
     {
         return await ReadAsync();
     }
+
+    public async Task<Recipe?> GetByIdAsync(int id)
+    {
+        var recipes = await ReadAsync();
+        return recipes.First(x => x.Id == id);
+    }
+
+    public async Task DeleteAsync(Recipe existingItem)
+    {
+        var recipes = await ReadAsync();
+        recipes.RemoveAll(x => existingItem.Id == x.Id);
+    }
 }

@@ -44,4 +44,15 @@ public class CategoryListRepository : IRepository<Category>
         return await ReadAsync();
     }
 
+    public async Task<Category?> GetByIdAsync(int id)
+    {
+        var categories = await ReadAsync();
+        return categories.Find(x => x.Id == id);
+    }
+
+    public async Task DeleteAsync(Category existingItem)
+    {
+        var categories = await ReadAsync();
+        categories.RemoveAll(x => x.Id == existingItem.Id);
+    }
 }
