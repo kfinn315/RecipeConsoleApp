@@ -5,7 +5,7 @@ using Project.Infrastructure.Database;
 using Project.Infrastructure.Repositories;
 using Xunit;
 
-namespace Project.Testing.Integration;
+namespace Project.Testing.Infrastructure;
 
 public class CategoriesRepositoryIntegrationTests : IDisposable
 {

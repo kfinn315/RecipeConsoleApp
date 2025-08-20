@@ -2,7 +2,7 @@ using Project.Core.Entities;
 using Project.Infrastructure.Database;
 using Xunit;
 
-namespace Project.Testing.Integration;
+namespace Project.Testing.Infrastructure;
 
 public class JsonDataStorageIntegrationTests : IDisposable
 {

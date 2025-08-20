@@ -7,7 +7,7 @@ using Project.Core.Entities;
 using Project.Core.Interfaces;
 using Xunit;
 
-namespace Project.Testing.Integration;
+namespace Project.Testing.API.Integration;
 
 public class CategoryEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 {

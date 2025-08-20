@@ -4,7 +4,7 @@ using Project.Core.Interfaces;
 using Project.Infrastructure.Repositories;
 using Xunit;
 
-namespace Project.UnitTests.Infrastructure;
+namespace Project.Testing.Infrastructure;
 /*
 Reads and writes Category data to dataStorage
 // Read:
