@@ -9,7 +9,7 @@
  */
 
 import { Client } from "../src/Client/Client";
-import { useRecipes } from "../src/Components/Hooks/useRecipes";
+import { useRecipes } from "../src/Hooks/useRecipes";
 import type { Recipe } from "../src/Types";
 import { act, renderHook, waitFor } from "@testing-library/react"
 

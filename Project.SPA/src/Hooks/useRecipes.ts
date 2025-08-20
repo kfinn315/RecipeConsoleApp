@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Client } from "../../Client/Client";
-import type { Recipe } from "../../Types/Recipe";
-import { baseUrl } from "../../Settings";
+import { Client } from "../Client/Client";
+import type { Recipe } from "../Types/Recipe";
+import { baseUrl } from "../Settings";
 
 interface UseRecipes {
     isLoading: boolean;

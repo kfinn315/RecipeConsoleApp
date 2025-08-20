@@ -6,8 +6,8 @@ import { Button, ThemeProvider } from '@mui/material';
 import { theme } from './Theme';
 import { CategoriesPage } from './Components/Pages/Categories/CategoriesPage';
 import { RecipeFormDialog } from './Components/Pages/Recipes/Form/RecipeFormDialog';
-import { useRecipes } from './Components/Hooks/useRecipes';
-import { useCategories } from './Components/Hooks/useCategories';
+import { useRecipes } from './Hooks/useRecipes';
+import { useCategories } from './Hooks/useCategories';
 import { ErrorBanner } from './Components/ErrorBanner';
 
 function App() {

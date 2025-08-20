@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Category } from "../../Types/Category";
-import { Client } from "../../Client/Client";
-import { baseUrl } from "../../Settings";
+import type { Category } from "../Types/Category";
+import { Client } from "../Client/Client";
+import { baseUrl } from "../Settings";
 
 interface UseCategories {
     isLoading: boolean;

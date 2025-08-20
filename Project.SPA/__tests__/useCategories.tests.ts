@@ -1,7 +1,7 @@
 import { Client } from "../src/Client/Client";
 import { act, renderHook, waitFor } from "@testing-library/react"
 import type { Category } from "../src/Types";
-import { useCategories } from "../src/Components/Hooks/useCategories";
+import { useCategories } from "../src/Hooks/useCategories";
 
 describe("useCategories", () => {
 
