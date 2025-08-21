@@ -23,4 +23,9 @@ export class RecipeClient implements Client<Recipe> {
         console.log('edit rec');
         return this.baseClient.update<Recipe>(`${this.recipeEndpoint}/${item.id}`, item);
     }
+
+    delete(item: Recipe): Promise<void> {
+        //TODO
+        return Promise.resolve();
+    }
 }

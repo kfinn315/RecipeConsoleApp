@@ -12,7 +12,7 @@ interface RecipePageProps {
     categories: Category[];
     isLoading: boolean;
     variant?: "list" | "table" | "cards";
-    onSubmit: (item: Recipe) => void;
+    onSubmit: (item: Recipe) => Promise<void>;
 }
 
 /**

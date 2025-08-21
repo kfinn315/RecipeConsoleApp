@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { type Client, RecipeClient } from "../Client";
-import type { Recipe, RecipeRequest } from "../Types";
+import { RecipeClient } from "../Client";
+import type { Recipe } from "../Types";
 import { baseUrl } from "../Configuration";
-import { useCategories } from "./useCategories";
 
 interface UseRecipes {
     isLoading: boolean;
@@ -11,14 +10,12 @@ interface UseRecipes {
     editRecipe: (item: Recipe) => Promise<void>;
     errorMessage?: string;
     clearErrorMessage: () => void;
-    processAndSaveRecipe: (item: RecipeRequest) => Promise<void>;
 }
 
-export function useRecipes(client: Client<Recipe> = new RecipeClient(baseUrl)): UseRecipes {
+export function useRecipes(client: RecipeClient = new RecipeClient(baseUrl)): UseRecipes {
     const [recipes, setRecipes] = useState<Recipe[] | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-    const { processRecipeCategories } = useCategories();
 
     useEffect(() => {
         setIsLoading(true);
@@ -48,14 +45,5 @@ export function useRecipes(client: Client<Recipe> = new RecipeClient(baseUrl)): 
         setErrorMessage(undefined);
     }
 
-    function processAndSaveRecipe(item: RecipeRequest) {
-        const categoryIDs = processRecipeCategories(item.categories);
-        const processedItem = { ...item, categories: categoryIDs };
-        if (processedItem?.id !== undefined)
-            editRecipe(processedItem);
-        else
-            addRecipe(processedItem);
-    }
-
-    return { processAndSaveRecipe, errorMessage, isLoading, recipes, addRecipe, editRecipe, clearErrorMessage }
+    return { errorMessage, isLoading, recipes, addRecipe, editRecipe, clearErrorMessage }
 }

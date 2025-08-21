@@ -1,4 +1,9 @@
 export interface Category {
-    id: number;
+    id?: number;
+    name: string;
+}
+
+export interface CategoryRequest {
+    id?: number;
     name: string;
 }

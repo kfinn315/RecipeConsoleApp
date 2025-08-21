@@ -2,7 +2,7 @@ import type { Category } from "../Types";
 import { BaseClient } from "./BaseClient";
 import type { Client } from "./Client";
 
-export class CategoryClient implements Client {
+export class CategoryClient implements Client<Category> {
     private categoryEndpoint: string;
     private baseClient: BaseClient;
     constructor(baseUrl: string) {
@@ -21,5 +21,10 @@ export class CategoryClient implements Client {
     update(item: Category): Promise<Category> {
         console.log('edit category');
         return this.baseClient.update<Category>(`${this.categoryEndpoint}/${item.id}`, item);
+    }
+
+    delete(item: Category): Promise<void> {
+        //TOOD
+        return Promise.resolve();
     }
 }

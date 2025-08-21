@@ -6,7 +6,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Button } from '@m
 interface RecipeFormProps {
     recipe?: Recipe;
     categories: Category[];
-    onSubmit: (item: RecipeRequest) => void;
+    onSubmit: (item: RecipeRequest) => Promise<void>;
     formId: string;
 }
 

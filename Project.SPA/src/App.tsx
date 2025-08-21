@@ -7,6 +7,7 @@ import { CategoriesPage } from './Components/Pages/Categories';
 import { RecipesPage, RecipeFormDialog } from './Components/Pages/Recipes';
 import { useCategories, useRecipes } from './Hooks';
 import type { RecipeRequest } from './Types';
+import { processNewRecipe } from './processNewRecipe';
 
 function App() {
 
@@ -14,16 +15,16 @@ function App() {
 
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const [content, setContent] = useState<string>(options[0]);
-  const { processAndSaveRecipe, isLoading: isRecipeLoading, recipes, errorMessage: recipeErrorMessage, clearErrorMessage } = useRecipes();
+  const { isLoading: isRecipeLoading, recipes, errorMessage: recipeErrorMessage, clearErrorMessage, addRecipe } = useRecipes();
   const { addCategory, categories, editCategory, isLoading: isCategoryLoading, errorMessage: categoryErrorMessage, clearErrorMessage: clearCategoryErrorMessage } = useCategories();
 
   function menuClickHandler(option: string) {
     setContent(options.find(x => x == option));
   }
 
-  const handleSubmit = (item: RecipeRequest) => {
+  const handleSubmit = async (item: RecipeRequest) => {
     setShowAddDialog(false);
-    processAndSaveRecipe(item);
+    await processNewRecipe(item, categories, addCategory, addRecipe);
   }
 
   function handleAddDialogClose() {
@@ -59,3 +60,4 @@ function App() {
 }
 
 export default App
+

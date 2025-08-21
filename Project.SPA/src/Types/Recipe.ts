@@ -1,6 +1,6 @@
 
 export interface Recipe {
-    id: number;
+    id?: number;
     title: string;
     categories: number[];
     ingredients: string[];
@@ -9,7 +9,7 @@ export interface Recipe {
 }
 
 export interface RecipeRequest {
-    id: number;
+    id?: number;
     title: string;
     categories: (string | number)[];
     ingredients: string[];

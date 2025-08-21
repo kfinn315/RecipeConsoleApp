@@ -8,31 +8,25 @@
  * sets isLoading to false after request from Client.ts is resolved
  */
 
-import { Client } from "../src/Client/Client";
-import { useRecipes } from "../src/Hooks/useRecipes";
+import { RecipeClient } from "../src/Client";
+import { useRecipes } from "../src/Hooks";
 import type { Recipe } from "../src/Types";
 import { act, renderHook, waitFor } from "@testing-library/react"
 
 describe("useRecipes", () => {
-
-    beforeEach(() => {
-        jest.clearAllMocks();
-        global.fetch = jest.fn();
-    });
-
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
     describe("initializing", () => {
-        let clientInstance: Client;
+        let clientInstance: RecipeClient;
 
         beforeEach(() => {
             // Reset all mocks before each test
             jest.clearAllMocks();
-
-            clientInstance = new Client(""); // Create a real instance of the Client class
+            global.fetch = jest.fn();
+            clientInstance = new RecipeClient(""); // Create a real instance of the Client class
         });
 
+        afterEach(() => {
+            jest.resetAllMocks();
+        });
         it("initially loads recipes from fetch", async () => {
             const mockData: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
             (fetch as jest.Mock).mockResolvedValueOnce({
@@ -43,12 +37,12 @@ describe("useRecipes", () => {
 
             const { result } = renderHook(() => useRecipes());
             await waitFor(() => { expect(result.current.isLoading).toBe(false) })
+            console.log((fetch as jest.Mock).mock.calls)
             expect(result.current.recipes).toBe(mockData);
         });
         it("sets errorMessage for initial getRecipes error", async () => {
             const mockErrorMessage = "this is the mock error message";
-            jest.spyOn(clientInstance, "getRecipes").mockRejectedValueOnce(new Error(mockErrorMessage));
-
+            jest.spyOn(clientInstance, "get").mockRejectedValue(new Error(mockErrorMessage));
 
             const { result } = renderHook(() => useRecipes(clientInstance));
             // Wait for the recipes to load
@@ -60,21 +54,24 @@ describe("useRecipes", () => {
         });
     });
     describe("addRecipe", () => {
-        let clientInstance: Client;
+        let clientInstance: RecipeClient;
 
         beforeEach(() => {
             // Reset all mocks before each test
             jest.clearAllMocks();
-
-            clientInstance = new Client(""); // Create a real instance of the Client class
+            global.fetch = jest.fn();
+            clientInstance = new RecipeClient(""); // Create a real instance of the Client class
         });
 
+        afterEach(() => {
+            jest.resetAllMocks();
+        });
         it("sets errorMessage for addRecipe error", async () => {
             const mockErrorMessage = "this is the mock error message";
             const mockNewRecipe: Recipe = { id: undefined, title: "title0", categories: [], ingredients: [], instructions: "" }
             const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
-            jest.spyOn(clientInstance, "addRecipe").mockRejectedValueOnce(new Error(mockErrorMessage));
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "add").mockRejectedValueOnce(new Error(mockErrorMessage));
 
             const { result } = renderHook(() => useRecipes(clientInstance));
             // Wait for the recipes to load
@@ -96,8 +93,8 @@ describe("useRecipes", () => {
         it("adds the new recipe in recipes list", async () => {
             const mockNewRecipe: Recipe = { id: undefined, title: "title0", categories: [], ingredients: [], instructions: "" }
             const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
-            jest.spyOn(clientInstance, "addRecipe").mockResolvedValueOnce(mockNewRecipe);
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "add").mockResolvedValueOnce(mockNewRecipe);
 
             const { result } = renderHook(() => useRecipes(clientInstance));
             // Wait for the recipes to load
@@ -141,23 +138,25 @@ describe("useRecipes", () => {
             expect((fetch as jest.Mock).mock.calls[1][1]).toHaveProperty("body", JSON.stringify(mockData));
         });
     });
-
-
-    describe("editRecipe", () => {
-        let clientInstance: Client;
+    describe("updateRecipe", () => {
+        let clientInstance: RecipeClient;
 
         beforeEach(() => {
             // Reset all mocks before each test
             jest.clearAllMocks();
+            global.fetch = jest.fn();
+            clientInstance = new RecipeClient(""); // Create a real instance of the Client class
+        });
 
-            clientInstance = new Client(""); // Create a real instance of the Client class
+        afterEach(() => {
+            jest.resetAllMocks();
         });
         it("sets errorMessage for editRecipe error", async () => {
             const mockErrorMessage = "this is the mock error message";
             const mockUpdateRecipe: Recipe = { id: 0, title: "title0", categories: [], ingredients: [], instructions: "" }
             const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
-            jest.spyOn(clientInstance, "updateRecipe").mockRejectedValueOnce(new Error(mockErrorMessage));
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "update").mockRejectedValueOnce(new Error(mockErrorMessage));
 
             const { result } = renderHook(() => useRecipes(clientInstance));
             // Wait for the recipes to load
@@ -178,8 +177,8 @@ describe("useRecipes", () => {
         it("updates the edited recipe in recipes list", async () => {
             const mockEditedRecipe: Recipe = { id: 0, title: "title0", categories: [], ingredients: [], instructions: "" }
             const mockExistingRecipes: Recipe[] = [{ id: 0, title: 'Recipe1', categories: [0, 1], ingredients: ["ingredient1"], instructions: "instructions" }];
-            jest.spyOn(clientInstance, "getRecipes").mockResolvedValueOnce(mockExistingRecipes);
-            jest.spyOn(clientInstance, "updateRecipe").mockResolvedValueOnce(mockEditedRecipe);
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingRecipes);
+            jest.spyOn(clientInstance, "update").mockResolvedValueOnce(mockEditedRecipe);
 
             const { result } = renderHook(() => useRecipes(clientInstance));
             // Wait for the recipes to load
@@ -229,7 +228,7 @@ describe("useRecipes", () => {
 
             // Verify the PUT request was sent with the correct data
             expect(fetchMock).toHaveBeenCalledWith(
-                expect.stringMatching(/recipes$/), // URL should end with "recipes"
+                expect.stringMatching(/recipes\/\d$/), // URL should end with "recipes"
                 expect.objectContaining({
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },

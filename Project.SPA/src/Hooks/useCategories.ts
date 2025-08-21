@@ -10,7 +10,6 @@ interface UseCategories {
     editCategory: (item: Category) => Promise<void>;
     errorMessage?: string;
     clearErrorMessage: () => void;
-    processRecipeCategories: (items: (number | string)[]) => number[]
 }
 
 export function useCategories(client: Client<Category> = new CategoryClient(baseUrl)): UseCategories {
@@ -20,9 +19,15 @@ export function useCategories(client: Client<Category> = new CategoryClient(base
 
     function addCategory(item: Category): Promise<number> {
         setIsLoading(true);
+
+        //@ts-expect-error id is expected to be returned in API response
         return client
             .add(item)
-            .then(c => { setCategories([...categories, c]); return c.id; })
+            .then(newCategory => {
+                setCategories([...categories, newCategory]);
+
+                return newCategory.id as unknown as number;
+            })
             .catch((reason: Error) => { setErrorMessage(reason.message); })
             .finally(() => { setIsLoading(false) });
     }
@@ -50,15 +55,6 @@ export function useCategories(client: Client<Category> = new CategoryClient(base
         setErrorMessage(undefined);
     }
 
-    function processRecipeCategories(items: (number | string)[]): number[] {
-        const itemsCopy = [...items]
-        const newCategories = itemsCopy.filter(x => typeof x === "string");
-        const categories = itemsCopy.filter(x => typeof x === 'number');
-        newCategories.forEach(category => {
-            addCategory({ name: category }).then((id) => { categories.push(id); });
-        });
-        return categories;
-    }
-
-    return { processRecipeCategories, isLoading, categories, addCategory, editCategory, clearErrorMessage, errorMessage };
+    return { isLoading, categories, addCategory, editCategory, clearErrorMessage, errorMessage };
 }
+

@@ -1,27 +1,22 @@
-import { Client } from "../src/Client/Client";
+import { CategoryClient } from "../src/Client";
 import { act, renderHook, waitFor } from "@testing-library/react"
 import type { Category } from "../src/Types";
-import { useCategories } from "../src/Hooks/useCategories";
+import { useCategories } from "../src/Hooks";
 
 describe("useCategories", () => {
+    let clientInstance: CategoryClient;
 
     beforeEach(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn();
+        clientInstance = new CategoryClient(""); // Create a real instance of the Client class
     });
 
     afterEach(() => {
         jest.resetAllMocks();
     });
+
     describe('intializing', () => {
-        let clientInstance: Client;
-
-        beforeEach(() => {
-            // Reset all mocks before each test
-            jest.clearAllMocks();
-
-            clientInstance = new Client(""); // Create a real instance of the Client class
-        });
         it("initially loads categories from fetch", async () => {
             const mockData: Category[] = [{ id: 0, name: 'Category1' }];
             (fetch as jest.Mock).mockResolvedValueOnce({
@@ -36,7 +31,7 @@ describe("useCategories", () => {
         });
         it("sets errorMessage for initial getCategories error", async () => {
             const mockErrorMessage = "this is the mock error message";
-            jest.spyOn(clientInstance, "getCategories").mockRejectedValueOnce(new Error(mockErrorMessage));
+            jest.spyOn(clientInstance, "get").mockRejectedValueOnce(new Error(mockErrorMessage));
 
 
             const { result } = renderHook(() => useCategories(clientInstance));
@@ -49,21 +44,12 @@ describe("useCategories", () => {
         });
     });
     describe("addCategory", () => {
-        let clientInstance: Client;
-
-        beforeEach(() => {
-            // Reset all mocks before each test
-            jest.clearAllMocks();
-
-            clientInstance = new Client(""); // Create a real instance of the Client class
-        });
-
         it("sets errorMessage for addCategory error", async () => {
             const mockErrorMessage = "this is the mock error message";
             const mockNewCategory: Category = { id: undefined, name: "title0" }
             const mockExistingCategories: Category[] = [{ id: 0, name: 'Category1' }];
-            jest.spyOn(clientInstance, "getCategories").mockResolvedValueOnce(mockExistingCategories);
-            jest.spyOn(clientInstance, "addCategory").mockRejectedValueOnce(new Error(mockErrorMessage));
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingCategories);
+            jest.spyOn(clientInstance, "add").mockRejectedValueOnce(new Error(mockErrorMessage));
 
             const { result } = renderHook(() => useCategories(clientInstance));
             // Wait for the categories to load
@@ -85,8 +71,8 @@ describe("useCategories", () => {
         it("adds the new recipe in categories list", async () => {
             const mockNewCategory: Category = { id: undefined, name: "title0" }
             const mockExistingCategories: Category[] = [{ id: 0, name: 'Category1' }];
-            jest.spyOn(clientInstance, "getCategories").mockResolvedValueOnce(mockExistingCategories);
-            jest.spyOn(clientInstance, "addCategory").mockResolvedValueOnce(mockNewCategory);
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingCategories);
+            jest.spyOn(clientInstance, "add").mockResolvedValueOnce(mockNewCategory);
 
             const { result } = renderHook(() => useCategories(clientInstance));
             // Wait for the categories to load
@@ -133,20 +119,12 @@ describe("useCategories", () => {
 
 
     describe("editCategory", () => {
-        let clientInstance: Client;
-
-        beforeEach(() => {
-            // Reset all mocks before each test
-            jest.clearAllMocks();
-
-            clientInstance = new Client(""); // Create a real instance of the Client class
-        });
         it("sets errorMessage for editCategory error", async () => {
             const mockErrorMessage = "this is the mock error message";
             const mockUpdateCategory: Category = { id: 0, name: "title0" }
             const mockExistingCategories: Category[] = [{ id: 0, name: 'Category1' }];
-            jest.spyOn(clientInstance, "getCategories").mockResolvedValueOnce(mockExistingCategories);
-            jest.spyOn(clientInstance, "updateCategory").mockRejectedValueOnce(new Error(mockErrorMessage));
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingCategories);
+            jest.spyOn(clientInstance, "update").mockRejectedValueOnce(new Error(mockErrorMessage));
 
             const { result } = renderHook(() => useCategories(clientInstance));
             // Wait for the categories to load
@@ -167,8 +145,8 @@ describe("useCategories", () => {
         it("updates the edited recipe in categories list", async () => {
             const mockEditedCategory: Category = { id: 0, name: "title0" }
             const mockExistingCategories: Category[] = [{ id: 0, name: 'Category1' }];
-            jest.spyOn(clientInstance, "getCategories").mockResolvedValueOnce(mockExistingCategories);
-            jest.spyOn(clientInstance, "updateCategory").mockResolvedValueOnce(mockEditedCategory);
+            jest.spyOn(clientInstance, "get").mockResolvedValueOnce(mockExistingCategories);
+            jest.spyOn(clientInstance, "update").mockResolvedValueOnce(mockEditedCategory);
 
             const { result } = renderHook(() => useCategories(clientInstance));
             // Wait for the categories to load
@@ -218,7 +196,7 @@ describe("useCategories", () => {
 
             // Verify the PUT request was sent with the correct data
             expect(fetchMock).toHaveBeenCalledWith(
-                expect.stringMatching(/categories$/), // URL should end with "categories"
+                expect.stringMatching(/categories\/\d+$/), // URL should end with "categories/{id}"
                 expect.objectContaining({
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
