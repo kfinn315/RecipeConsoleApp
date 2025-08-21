@@ -15,13 +15,13 @@ import type { Config } from "jest";
 
 const config: Config = {
   preset: "ts-jest",
-  testEnvironment: "jsdom",
+  testEnvironment: "jest-fixed-jsdom",
   // moduleNameMapper: {
   //   "^@/(.*)$": "<rootDir>/src/$1", // Adjust based on your alias configuration
   // },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   modulePaths: ['<rootDir>/src'],
-  // testMatch: '**/tests/'
+  setupFilesAfterEnv: ["<rootDir>/mocks/setupTests.ts"],
 };
 
 export default config;
