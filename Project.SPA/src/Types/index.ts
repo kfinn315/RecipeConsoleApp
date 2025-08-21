@@ -1,4 +1,4 @@
 import { Category } from './Category';
-import { Recipe } from './Recipe';
+import { Recipe, RecipeRequest } from './Recipe';
 
-export { Category, Recipe }
+export { Category, Recipe, RecipeRequest };

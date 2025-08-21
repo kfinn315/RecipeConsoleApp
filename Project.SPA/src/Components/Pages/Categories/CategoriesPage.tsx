@@ -1,10 +1,10 @@
 import type React from 'react';
+import { useState } from 'react';
 import { CategoryTable } from './CategoryTable';
 import { Button } from '@mui/material';
-import { useState } from 'react';
-import type { Category } from '../../../Types/Category';
+import type { Category } from '../../../Types';
 import { CategoryForm } from './CategoryForm';
-import { ErrorBanner } from '../../ErrorBanner';
+import { ErrorBanner } from '../../Shared';
 
 export function CategoriesPage({ addCategory, categories, editCategory, isLoading }: { isLoading?: boolean, categories: Category[], addCategory, editCategory }) {
     const [showModal, setShowModal] = useState<boolean>(false);

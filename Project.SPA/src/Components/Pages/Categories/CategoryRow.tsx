@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Category } from '../../../Types/Category';
+import type { Category } from '../../../Types';
 import { TableCell, TableRow } from '@mui/material';
 
 export function CategoryRow({ item, onClick }: { item: Category; onClick: (item: Category) => void | undefined; }) {

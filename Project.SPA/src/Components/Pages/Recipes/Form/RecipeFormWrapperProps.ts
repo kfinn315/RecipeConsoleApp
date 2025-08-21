@@ -1,10 +1,9 @@
-import type { Category, Recipe } from '../../../../Types';
+// import type { Category, Recipe, RecipeRequest } from '../../../../Types';
 
-
-export interface RecipeFormWrapperProps {
-    categories: Category[];
-    show: boolean;
-    item: Recipe | undefined;
-    onSubmit: (item: Recipe) => void;
-    onClose;
-}
+// export interface RecipeFormWrapperProps {
+//     categories: Category[];
+//     show: boolean;
+//     item: Recipe | undefined;
+//     onSubmit: (item: RecipeRequest) => void;
+//     onClose;
+// }

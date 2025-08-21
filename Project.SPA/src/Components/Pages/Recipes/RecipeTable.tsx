@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Recipe } from '../../../Types/Recipe';
+import type { Recipe } from '../../../Types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 /**

@@ -1,7 +1,15 @@
 import type React from 'react';
-import { FormDialog } from '../../FormDialog';
+import { FormDialog } from '../../../Shared/FormDialog';
 import { RecipeForm } from './RecipeForm';
-import type { RecipeFormWrapperProps } from './RecipeFormWrapperProps';
+import type { RecipeRequest } from '../../../../Types';
+
+export interface RecipeFormWrapperProps {
+    categories: Category[];
+    show: boolean;
+    item?: Recipe;
+    onSubmit: (item: RecipeRequest) => void;
+    onClose?: () => void;
+}
 
 export const RecipeFormDialog = ({ show, item, categories, onSubmit, onClose }: RecipeFormWrapperProps) => {
     const formId = 'recipe-form';

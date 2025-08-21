@@ -2,7 +2,13 @@ import { Button, Card, CardActions } from "@mui/material"
 import type { Recipe } from "../../../../Types"
 import { RecipeCardContent } from "./RecipeCardContent"
 
-export function RecipeCard({ item, onEdit, onClick }: { item: Recipe, onEdit, onClick }) {
+interface RecipeCardProps {
+    item: Recipe;
+    onEdit: () => void;
+    onClick: () => void;
+}
+
+export function RecipeCard({ item, onEdit, onClick }: RecipeCardProps) {
     return <Card className={`card recipe-card`} variant='elevation'>
         <RecipeCardContent item={item} onClick={onClick} />
         <CardActions className="card-actions" >

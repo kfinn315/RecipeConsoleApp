@@ -12,10 +12,8 @@ export function RecipeCardContent({ item, onClick }: { item: Recipe, onClick }) 
 
 function CategoriesDisplay({ items = [] }: { items?: number[] }) {
     return <div className="card-section">
-        {/* Categories:&nbsp; */}
-        {/* {items?.length == undefined && <i>No Categories.</i>} */}
         <ul>
-            {items.map(x => <li className="pill">{x}</li>)}
+            {items.map((name, ix) => <li key={ix} className="pill">{name}</li>)}
         </ul>
     </div >;
 }

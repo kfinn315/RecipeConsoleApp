@@ -1,12 +1,19 @@
 import type React from 'react';
 import { useState } from 'react';
 import { RecipeTable } from './RecipeTable';
-import type { Recipe } from '../../../Types/Recipe';
+import type { Recipe, RecipeRequest, Category } from '../../../Types';
 import { RecipeList } from './RecipeList';
 import { RecipeFormDialog } from './Form/RecipeFormDialog';
 import { RecipeCards } from './Card/RecipeCards';
 import { RecipeDialog } from './RecipeDialog';
-import type { Category } from '../../../Types/Category';
+
+interface RecipePageProps {
+    recipes: Recipe[];
+    categories: Category[];
+    isLoading: boolean;
+    variant?: "list" | "table" | "cards";
+    onSubmit: (item: Recipe) => void;
+}
 
 /**
  * shows a list of Recipes
@@ -14,7 +21,7 @@ import type { Category } from '../../../Types/Category';
  * shows error message if client encounters error w/ API
  * updates to show latest recipes after adding or editing
  */
-export function RecipesPage({ addRecipe, categories, editRecipe, isLoading, recipes, variant = "table" }: { recipes: Recipe[], categories: Category[], isLoading: boolean, editRecipe, addRecipe, variant?: "list" | "table" | "cards" }) {
+export function RecipesPage({ onSubmit: onAddSubmit, categories, isLoading, recipes, variant = "table" }: RecipePageProps) {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showDetail, setShowDetail] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
@@ -30,14 +37,9 @@ export function RecipesPage({ addRecipe, categories, editRecipe, isLoading, reci
     }
 
 
-    const handleSubmit = (item: Recipe) => {
+    const handleSubmit = (item: RecipeRequest) => {
         setShowForm(false);
-        setTimeout(() => {
-            if (item?.id)
-                editRecipe(item);
-            else
-                addRecipe(item);
-        }, 1000);
+        onAddSubmit(item);
     }
 
     function handleFormClose() {

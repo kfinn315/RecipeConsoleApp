@@ -7,7 +7,7 @@ export interface MenuOption {
     page: JSX.Element;
 
 }
-export default function Menu({ selected, options, onClick }: { selected?: string, options: string[], onClick: (option: string) => void }) {
+export function Menu({ selected, options, onClick }: { selected?: string, options: string[], onClick: (option: string) => void }) {
     const isHighlighted = (option: string) => selected && option == selected;
     return <ul className='menu-items'>
         {options.map((option, ix) => (

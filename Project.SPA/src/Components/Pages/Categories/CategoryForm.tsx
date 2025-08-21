@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Category } from '../../Types/Category';
+import type { Category } from '../../Types';
 import { useState } from 'react';
 
 export function CategoryForm({ category, onSubmit }: { category: Category | undefined; onSubmit: (item: Category) => void }) {
