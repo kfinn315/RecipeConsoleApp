@@ -1,19 +1,21 @@
 import { CardContent } from "@mui/material";
-import type { Recipe } from "../../../../Types";
+import type { Category, DisplayRecipe } from "../../../../Types";
 
-export function RecipeCardContent({ item, onClick }: { item: Recipe, onClick }) {
+export function RecipeCardContent({ item, onClick }: { item: DisplayRecipe, onClick }) {
     return <CardContent onClick={onClick} className='card-content recipe-card-content'>
         <div className='card-title'>{item.title}</div>
-        <IngredientsDisplay items={item.ingredients} />
-        <InstructionsDisplay items={item.instructions} />
-        <CategoriesDisplay items={item.categories} />
+        <div className='card-detail'>
+            <IngredientsDisplay items={item.ingredients} />
+            <InstructionsDisplay items={item.instructions} />
+            <CategoriesDisplay items={item.categories} />
+        </div>
     </CardContent>
 }
 
-function CategoriesDisplay({ items = [] }: { items?: number[] }) {
+function CategoriesDisplay({ items = [] }: { items?: Category[] }) {
     return <div className="card-section">
         <ul>
-            {items.map((name, ix) => <li key={ix} className="pill">{name}</li>)}
+            {items.filter(x => x).map((c) => <li key={`${c.id}_${c.name}`} className="pill">{c.name}</li>)}
         </ul>
     </div >;
 }

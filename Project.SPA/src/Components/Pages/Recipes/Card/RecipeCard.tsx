@@ -1,9 +1,9 @@
 import { Button, Card, CardActions } from "@mui/material"
-import type { Recipe } from "../../../../Types"
+import type { DisplayRecipe } from "../../../../Types"
 import { RecipeCardContent } from "./RecipeCardContent"
 
 interface RecipeCardProps {
-    item: Recipe;
+    item: DisplayRecipe;
     onEdit: () => void;
     onClick: () => void;
 }

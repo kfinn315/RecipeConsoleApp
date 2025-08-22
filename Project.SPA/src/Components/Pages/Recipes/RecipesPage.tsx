@@ -1,14 +1,14 @@
 import type React from 'react';
 import { useState } from 'react';
 import { RecipeTable } from './RecipeTable';
-import type { Recipe, RecipeRequest, Category } from '../../../Types';
+import type { Recipe, RecipeRequest, Category, DisplayRecipe } from '../../../Types';
 import { RecipeList } from './RecipeList';
 import { RecipeFormDialog } from './Form/RecipeFormDialog';
 import { RecipeCards } from './Card/RecipeCards';
 import { RecipeDialog } from './RecipeDialog';
 
 interface RecipePageProps {
-    recipes: Recipe[];
+    recipes: DisplayRecipe[];
     categories: Category[];
     isLoading: boolean;
     variant?: "list" | "table" | "cards";

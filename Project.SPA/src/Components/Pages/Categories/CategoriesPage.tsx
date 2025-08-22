@@ -6,7 +6,14 @@ import type { Category } from '../../../Types';
 import { CategoryForm } from './CategoryForm';
 import { ErrorBanner } from '../../Shared';
 
-export function CategoriesPage({ addCategory, categories, editCategory, isLoading }: { isLoading?: boolean, categories: Category[], addCategory, editCategory }) {
+interface CategoriesPageProps {
+    isLoading?: boolean;
+    categories: Category[];
+    addCategory: (item: Category) => Promise<void>;
+    editCategory: (item: Category) => Promise<void>;
+}
+
+export function CategoriesPage({ addCategory, categories, editCategory, isLoading }: CategoriesPageProps) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selected, setSelected] = useState<Recipe | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>(undefined);

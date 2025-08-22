@@ -213,6 +213,7 @@ li.menu-item .icon {
   background: var(--pill-background-color);
   color: var(--pill-color);
   padding: 6px;
+  margin-inline: 6px;
   border: transparent 1px solid;
   border-radius: 8px;
   display: inline-block;
@@ -224,6 +225,14 @@ li.menu-item .icon {
 
 .card-section ul {
   margin: 0px;
+  flex: 1;
+}
+
+.card-detail {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0;
+  justify-content: space-evenly;
 }
 
 @media(width < 500px) {

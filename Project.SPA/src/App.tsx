@@ -5,40 +5,42 @@ import { Button, ThemeProvider } from '@mui/material';
 import { theme } from './Theme';
 import { CategoriesPage } from './Components/Pages/Categories';
 import { RecipesPage, RecipeFormDialog } from './Components/Pages/Recipes';
-import { useCategories, useRecipes } from './Hooks';
 import type { RecipeRequest } from './Types';
-import { processNewRecipe } from './processNewRecipe';
+import { useDatasource } from './Hooks';
 
 function App() {
-
   const options: string[] = ["Recipes", "Categories"]
 
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const [content, setContent] = useState<string>(options[0]);
-  const { isLoading: isRecipeLoading, recipes, errorMessage: recipeErrorMessage, clearErrorMessage, addRecipe } = useRecipes();
-  const { addCategory, categories, editCategory, isLoading: isCategoryLoading, errorMessage: categoryErrorMessage, clearErrorMessage: clearCategoryErrorMessage } = useCategories();
+  const { categories: { categories, addCategory, editCategory }, recipes: { addRecipe, editRecipe, recipes }, clearErrorMessage, isLoading, errorMessage } = useDatasource();
 
   function menuClickHandler(option: string) {
     setContent(options.find(x => x == option));
   }
 
-  const handleSubmit = async (item: RecipeRequest) => {
+  const handleAddSubmit = async (item: RecipeRequest) => {
     setShowAddDialog(false);
-    await processNewRecipe(item, categories, addCategory, addRecipe);
+    await addRecipe(item)
   }
 
+
+  const handleEditSubmit = async (item: RecipeRequest) => {
+    setShowAddDialog(false);
+    await editRecipe(item)
+  }
   function handleAddDialogClose() {
     setShowAddDialog(false);
   }
 
   const currentPage = content == "Recipes" &&
-    <RecipesPage onSubmit={handleSubmit} variant="cards" categories={categories} isLoading={isRecipeLoading} recipes={recipes} />
+    <RecipesPage onSubmit={handleEditSubmit} variant="cards" categories={categories} isLoading={isLoading} recipes={recipes} />
     ||
-    <CategoriesPage addCategory={addCategory} categories={categories} editCategory={editCategory} isLoading={isCategoryLoading} />
+    <CategoriesPage addCategory={addCategory} categories={categories} editCategory={editCategory} isLoading={isLoading} />
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={"container"}>
+      <div className='container'>
         <header className='heading'>
           <h1>
             Recipe App
@@ -49,11 +51,10 @@ function App() {
           <Menu onClick={menuClickHandler} options={options} selected={content} />
         </nav>
         <main className='content'>
-          <ErrorBanner message={recipeErrorMessage} onClose={() => { clearErrorMessage() }} />
-          <ErrorBanner message={categoryErrorMessage} onClose={() => { clearCategoryErrorMessage() }} />
+          <ErrorBanner message={errorMessage} onClose={clearErrorMessage} />
           {currentPage}
         </main>
-        <RecipeFormDialog show={showAddDialog} onClose={handleAddDialogClose} onSubmit={handleSubmit} categories={categories} item={undefined} />
+        <RecipeFormDialog show={showAddDialog} onClose={handleAddDialogClose} onSubmit={handleAddSubmit} categories={categories} item={undefined} />
       </div>
     </ThemeProvider>
   )
