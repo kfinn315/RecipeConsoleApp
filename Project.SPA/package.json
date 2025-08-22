@@ -8,13 +8,15 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "msw-auto-mock": "npx msw-auto-mock ./mocks/openapi.json -o ./mock.js --node"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.1",
     "jest-fixed-jsdom": "^0.0.9",
+    "msw-auto-mock": "^0.18.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -37,7 +39,6 @@
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4",
-    "whatwg-fetch": "^3.6.20"
+    "vite": "^7.0.4"
   }
 }
