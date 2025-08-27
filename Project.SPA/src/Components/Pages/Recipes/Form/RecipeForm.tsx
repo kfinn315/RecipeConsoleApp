@@ -1,12 +1,12 @@
 import type React from 'react';
-import type { Category, RecipeRequest, DisplayRecipe } from '../../../../Types';
+import type { Category, DisplayRecipe, Recipe, OptionalID } from '../../../../Types';
 import { useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Button } from '@mui/material';
 
 interface RecipeFormProps {
     recipe?: DisplayRecipe;
     categories: Category[];
-    onSubmit: (item: RecipeRequest) => Promise<void>;
+    onSubmit: (item: OptionalID<Recipe>, categories?: string[]) => void;
     formId: string;
 }
 
@@ -16,26 +16,26 @@ interface RecipeFormProps {
  * - on submit click, the onSubmit parameter is called and passed a Recipe interface w/ all the field values
  */
 export function RecipeForm({ recipe, categories: categoryOptions, onSubmit, formId }: RecipeFormProps) {
-    const [title, setTitle] = useState<string>(recipe?.title);
-    const [categories, setCategories] = useState<number[]>(recipe?.categories?.map(x => x.id) ?? []);
+    const [title, setTitle] = useState<string>(recipe?.title ?? "");
+    const [categories, setCategories] = useState<number[]>(recipe?.categories?.filter(x => x.id !== undefined).map(x => x.id as number) ?? []);
     const [newCategories, setNewCategories] = useState<string[]>([]);
     const [ingredients, setIngredients] = useState<string[]>(recipe?.ingredients ?? []);
     const [instructions, setInstructions] = useState<string>(recipe?.instructions ?? "");
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
-        const newRecipe: RecipeRequest = {
+        const recipeData = {
             id: recipe?.id,
             title,
-            categories: { ids: categories, names: newCategories },
+            categories,
             ingredients,
             instructions
         };
-        console.info(newRecipe);
-        onSubmit(newRecipe);
+        console.info(recipeData);
+        onSubmit(recipeData, newCategories);
     }
 
-    function handleIngredientsChange(ev) {
+    const handleIngredientsChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (ev) => {
         //split input on newline characters
         setIngredients((ev.target.value as string).split('\n'));
     }

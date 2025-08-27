@@ -71,3 +71,4 @@ settings.json
 Project.API/Data/
 Project.SPA/.vite/
 Project.SPA/node_modules/
+Project.SPA/coverage/

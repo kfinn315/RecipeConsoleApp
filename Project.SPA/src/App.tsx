@@ -5,7 +5,7 @@ import { Button, ThemeProvider } from '@mui/material';
 import { theme } from './Theme';
 import { CategoriesPage } from './Components/Pages/Categories';
 import { RecipesPage, RecipeFormDialog } from './Components/Pages/Recipes';
-import type { RecipeRequest } from './Types';
+import type { Recipe, OptionalID } from './Types';
 import { useDatasource } from './Hooks';
 
 function App() {
@@ -16,18 +16,18 @@ function App() {
   const { categories: { categories, addCategory, editCategory }, recipes: { addRecipe, editRecipe, recipes }, clearErrorMessage, isLoading, errorMessage } = useDatasource();
 
   function menuClickHandler(option: string) {
-    setContent(options.find(x => x == option));
+    setContent(options.find(x => x == option) ?? options[0]);
   }
 
-  const handleAddSubmit = async (item: RecipeRequest) => {
+  const handleAddSubmit = async (item: OptionalID<Recipe>, categoryNames?: string[]) => {
     setShowAddDialog(false);
-    await addRecipe(item)
+    await addRecipe(item, categoryNames)
   }
 
+  const handleEditSubmit = async (item: OptionalID<Recipe>, categoryNames?: string[]) => {
 
-  const handleEditSubmit = async (item: RecipeRequest) => {
     setShowAddDialog(false);
-    await editRecipe(item)
+    await editRecipe(item as Recipe, categoryNames)
   }
   function handleAddDialogClose() {
     setShowAddDialog(false);

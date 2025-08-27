@@ -52,10 +52,10 @@ export const handlers = [
 
     return HttpResponse.json(...resultArray[next() % resultArray.length]);
   }),
-  http.post(`${baseURL}/recipes`, () => {
+  http.post(`${baseURL}/recipes`, async ({ request }) => {
     const resultArray = [[null, { status: 200 }]];
-
-    return HttpResponse.json(...resultArray[next() % resultArray.length]);
+    const recipe = await request.json()
+    return HttpResponse.json([{ ...(recipe as Record<string, unknown>), id: 3 }, ...resultArray[next() % resultArray.length]]);
   }),
   http.get(`${baseURL}/recipes/:id`, () => {
     const resultArray = [[null, { status: 200 }]];

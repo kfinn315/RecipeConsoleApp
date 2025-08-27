@@ -1,22 +1,11 @@
-import type { Category } from "./Category";
+import { type Category } from "./Category";
 
 export interface Recipe {
-    id?: number;
+    id: number;
     title: string;
-    categories: Category[];
+    categories: number[];
     ingredients: string[];
     instructions: string;
-
 }
 
-export interface RecipeRequest {
-    id?: number;
-    title: string;
-    categories: {
-        ids: number[];
-        names: string[];
-    }
-    ingredients: string[];
-    instructions: string;
-
-}
+export type DisplayRecipe = Omit<Recipe, "categories"> & { categories: Category[]; };

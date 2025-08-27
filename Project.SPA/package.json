@@ -9,19 +9,17 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
-    "msw-auto-mock": "npx msw-auto-mock ./mocks/openapi.json -o ./mock.js --node"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.1",
-    "jest-fixed-jsdom": "^0.0.9",
-    "msw-auto-mock": "^0.18.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@mswjs/source": "^0.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
@@ -31,9 +29,9 @@
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
     "jest": "^30.0.5",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.5",
+    "jest-fixed-jsdom": "^0.0.9",
     "msw": "^2.10.5",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",

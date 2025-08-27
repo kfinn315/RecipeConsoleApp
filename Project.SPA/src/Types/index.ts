@@ -1,5 +1,5 @@
-import { Category, CategoryRequest } from './Category';
-import { Recipe, RecipeRequest } from './Recipe';
-import { DisplayRecipe } from './DisplayRecipe';
+import { type Category } from './Category';
+import { type Recipe, type DisplayRecipe } from './Recipe';
+import { type OptionalID } from './OptionalID';
 
-export { Category, CategoryRequest, Recipe, RecipeRequest, DisplayRecipe };
+export { type Category, type Recipe, type DisplayRecipe, type OptionalID };

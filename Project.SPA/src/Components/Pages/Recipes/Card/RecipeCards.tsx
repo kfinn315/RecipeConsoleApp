@@ -1,12 +1,11 @@
-import type React from 'react';
-import type { Recipe, DisplayRecipe } from '../../../../Types';
+import type { DisplayRecipe } from '../../../../Types';
 import { RecipeCard } from './RecipeCard';
 
 interface RecipeCardsProps {
     isLoading: boolean;
     recipes: DisplayRecipe[];
-    onEdit?: (item: Recipe) => void;
-    onClick?: (item: Recipe) => void;
+    onEdit?: (item: DisplayRecipe) => void;
+    onClick?: (item: DisplayRecipe) => void;
 }
 
 /**

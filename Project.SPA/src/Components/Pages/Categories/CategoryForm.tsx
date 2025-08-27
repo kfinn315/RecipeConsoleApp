@@ -1,17 +1,18 @@
 import type React from 'react';
-import type { Category } from '../../Types';
 import { useState } from 'react';
+import type { Category, OptionalID } from '../../../Types';
 
-export function CategoryForm({ category, onSubmit }: { category: Category | undefined; onSubmit: (item: Category) => void }) {
-    const [formCategory, setCategory] = useState<Category | undefined>(category);
+export function CategoryForm({ category, onSubmit }: { category?: Category; onSubmit: (item: OptionalID<Category>) => void }) {
+    const [formCategory, setCategory] = useState<OptionalID<Category> | undefined>(category);
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
-        onSubmit(formCategory);
+        if (formCategory !== undefined)
+            onSubmit(formCategory);
     }
 
     return <form onSubmit={handleSubmit}>
         <div>
-            <label for="name">Name</label>
+            <label htmlFor="name">Name</label>
             <input type={'text'} name={'name'} value={category?.name} onChange={(event) => setCategory({ ...formCategory, name: event.target.value })} />
         </div>
         <input type={'hidden'} name={'Id'} value={category?.id} />

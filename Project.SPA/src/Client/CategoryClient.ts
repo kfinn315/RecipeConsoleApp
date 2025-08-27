@@ -1,6 +1,7 @@
 import type { Category } from "../Types";
 import { BaseClient } from "./BaseClient";
 import type { Client } from "./Client";
+import { type OptionalID } from "../Types/OptionalID";
 
 export class CategoryClient implements Client<Category> {
     private categoryEndpoint: string;
@@ -14,7 +15,7 @@ export class CategoryClient implements Client<Category> {
         console.log('get categories');
         return this.baseClient.get<Category[]>(this.categoryEndpoint);
     }
-    add(item: Category): Promise<Category> {
+    add(item: OptionalID<Category>): Promise<Category> {
         console.log('add category');
         return this.baseClient.add<Category>(this.categoryEndpoint, item);
     }

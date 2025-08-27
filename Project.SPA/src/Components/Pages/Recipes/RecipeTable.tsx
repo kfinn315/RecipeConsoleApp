@@ -1,5 +1,4 @@
-import type React from 'react';
-import type { Recipe } from '../../../Types';
+import type { DisplayRecipe } from '../../../Types';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 /**
@@ -7,7 +6,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
  * display props.recipes in the table
  * props.onClick is called when Edit anchor is clicked, passing the Recipe of the row clicked
  */
-export function RecipeTable({ isLoading, recipes = [], onClick }: { isLoading: boolean, recipes: Recipe[]; onClick: (item: Recipe) => void | undefined; }) {
+export function RecipeTable({ isLoading, recipes = [], onClick }: { isLoading: boolean, recipes: DisplayRecipe[]; onClick?: (item: DisplayRecipe) => void; }) {
     return <>
         {isLoading ? "Loading!" :
             <TableContainer>
@@ -48,7 +47,7 @@ export function RecipeTable({ isLoading, recipes = [], onClick }: { isLoading: b
  * prop.item values fill the TableCell tags
  * when Edit anchor is clicked, prop.onClick is called, passing prop.item
  */
-function RecipeRow({ item, onClick }: { item: Recipe; onClick: (item: Recipe) => void | undefined; }) {
+function RecipeRow({ item, onClick }: { item: DisplayRecipe; onClick?: (item: DisplayRecipe) => void; }) {
     function handleClick() {
         onClick?.(item);
     }
@@ -57,9 +56,9 @@ function RecipeRow({ item, onClick }: { item: Recipe; onClick: (item: Recipe) =>
         <TableCell>{item.title}</TableCell>
         <TableCell>{item.ingredients}</TableCell>
         <TableCell>{item.instructions}</TableCell>
-        <TableCell>{item.categories}</TableCell>
+        <TableCell>{item.categories.map(x => x.name).join(", ")}</TableCell>
         <TableCell>
-            {onClick && <a onClick={handleClick} href="#">Edit</a>}
+            {onClick !== undefined && <a onClick={handleClick} href="#">Edit</a>}
         </TableCell>
     </TableRow>
 }

@@ -1,12 +1,12 @@
 import { CardContent } from "@mui/material";
 import type { Category, DisplayRecipe } from "../../../../Types";
 
-export function RecipeCardContent({ item, onClick }: { item: DisplayRecipe, onClick }) {
+export function RecipeCardContent({ item, onClick }: { item: DisplayRecipe, onClick?: ()=>void }) {
     return <CardContent onClick={onClick} className='card-content recipe-card-content'>
         <div className='card-title'>{item.title}</div>
         <div className='card-detail'>
             <IngredientsDisplay items={item.ingredients} />
-            <InstructionsDisplay items={item.instructions} />
+            <InstructionsDisplay item={item.instructions} />
             <CategoriesDisplay items={item.categories} />
         </div>
     </CardContent>

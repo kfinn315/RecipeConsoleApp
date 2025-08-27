@@ -1,5 +1,4 @@
-import type React from 'react';
-import type { Recipe } from '../../../Types';
+import type { DisplayRecipe } from '../../../Types';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 
@@ -8,7 +7,7 @@ import { useState } from 'react';
  * display props.recipes in the table
  * props.onClick is called when Edit anchor is clicked, passing the Recipe of the row clicked
  */
-export function RecipeList({ isLoading = false, recipes = [], onClick }: { isLoading: boolean, recipes: Recipe[]; onClick: (item: Recipe) => void | undefined; }) {
+export function RecipeList({ isLoading = false, recipes = [], onClick }: { isLoading: boolean, recipes: DisplayRecipe[]; onClick: (item: DisplayRecipe) => void | undefined; }) {
     return <>
         {isLoading ? "Loading!" :
             <ul className="recipe-list">
@@ -18,7 +17,7 @@ export function RecipeList({ isLoading = false, recipes = [], onClick }: { isLoa
     </>
 }
 
-function RecipeItem({ item, onClick }: { item: Recipe, onClick, expanded: boolean }) {
+function RecipeItem({ item, onClick }: { item: DisplayRecipe, onClick?: (item: DisplayRecipe) => void, expanded?: boolean }) {
     const [expanded, setExpanded] = useState<boolean>(false);
 
     function toggleExpanded() {
@@ -33,17 +32,17 @@ function RecipeItem({ item, onClick }: { item: Recipe, onClick, expanded: boolea
             <i>
                 {item.categories.join(' ')}
             </i>
-            <Button onClick={() => { onClick(item) }}>Edit</Button>
+            <Button onClick={() => { onClick?.(item) }}>Edit</Button>
             {expanded && <RecipeDetail item={item} />}
         </div>
     </li >
 }
 
-function RecipeDetail({ item }: { item: Recipe }) {
+function RecipeDetail({ item }: { item: DisplayRecipe }) {
     // const [ingredients, setIngredients] = useState<string[]>(item.ingredients)
     return <ul>
         <li>
-            Categories: {item.categories.join(', ')}
+            Categories: {item.categories.map(x => x.name).join(', ')}
         </li>
         <li>
             <IngredientsList items={item.ingredients} />

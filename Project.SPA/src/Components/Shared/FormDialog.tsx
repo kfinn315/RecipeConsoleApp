@@ -1,10 +1,11 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
+import { type PropsWithChildren } from 'react';
 
-export const FormDialog = ({ className, open, title, children, onClose, onSubmit, formId }: { className?: string, onSubmit, onClose, open: boolean, title: string, children, formId: string }) => {
+export const FormDialog = ({ className, open, title, children, onClose, onSubmit, formId }: PropsWithChildren<{ className?: string, onSubmit?: () => void, onClose?: () => void, open: boolean, title: string, formId: string }>) => {
     function handleClose() {
-        onClose();
+        onClose?.();
     }
-    return <Dialog className={className} open={open} onClose={onClose} maxWidth='sm' fullWidth='true'>
+    return <Dialog className={className} open={open} onClose={onClose} maxWidth='sm' fullWidth={true}>
         <DialogTitle>
             {title}
         </DialogTitle>

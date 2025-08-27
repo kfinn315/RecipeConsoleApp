@@ -1,3 +1,4 @@
+import type { OptionalID } from "../Types/OptionalID";
 
 export class BaseClient {
     constructor() { }
@@ -14,7 +15,7 @@ export class BaseClient {
             });
     }
 
-    add<T>(url: string, item: T): Promise<T> {
+    add<T extends { id: number }>(url: string, item: OptionalID<T>): Promise<T> {
         return fetch(url, {
             method: "POST",
             body: JSON.stringify(item),

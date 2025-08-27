@@ -1,4 +1,3 @@
-import React from 'react';
 import type { JSX } from '@emotion/react/jsx-runtime';
 import { Button } from '@mui/material';
 

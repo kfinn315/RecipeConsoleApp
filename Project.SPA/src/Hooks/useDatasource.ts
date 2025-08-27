@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Category, Recipe, RecipeRequest, DisplayRecipe } from "../Types";
-import { CategoryClient, RecipeClient, type Client } from "../Client";
+import type { Category, Recipe, DisplayRecipe, OptionalID } from "../Types";
+import { CategoryClient, RecipeClient } from "../Client";
 import { baseUrl } from "../Configuration";
 
 interface UseDatasource {
@@ -10,19 +10,19 @@ interface UseDatasource {
 
     categories: {
         categories: Category[];
-        addCategory: (item: Category) => Promise<number>;
+        addCategory: (item: OptionalID<Category>) => Promise<number>;
         editCategory: (item: Category) => Promise<void>;
     };
     recipes: {
         recipes: DisplayRecipe[];
-        addRecipe: (item: RecipeRequest) => Promise<number>;
-        editRecipe: (item: RecipeRequest) => Promise<void>;
+        addRecipe: (item: OptionalID<Recipe>, pendingCategories?: string[]) => Promise<void>;
+        editRecipe: (item: Recipe, pendingCategories?: string[]) => Promise<void>;
     }
 }
 
-export function useDatasource(categoryClient: Client<Category> = new CategoryClient(baseUrl), recipeClient: Client<Recipe> = new RecipeClient(baseUrl)): UseDatasource {
+export function useDatasource(categoryClient: CategoryClient = new CategoryClient(baseUrl), recipeClient: RecipeClient = new RecipeClient(baseUrl)): UseDatasource {
     const [categories, setCategories] = useState<Category[] | undefined>(undefined);
-    const [recipes, setRecipes] = useState<DisplayRecipe[]>(undefined);
+    const [recipes, setRecipes] = useState<DisplayRecipe[] | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
@@ -49,14 +49,14 @@ export function useDatasource(categoryClient: Client<Category> = new CategoryCli
 
     /** Categories */
 
-    function addCategory(item: Category): Promise<number> {
+    function addCategory(item: OptionalID<Category>): Promise<number> {
         setIsLoading(true);
 
         //@ts-expect-error id is expected to be returned in API response
         return categoryClient
             .add(item)
             .then(newCategory => {
-                setCategories([...categories, newCategory]);
+                setCategories([...(categories ?? []), newCategory]);
 
                 return newCategory.id as unknown as number;
             })
@@ -73,59 +73,57 @@ export function useDatasource(categoryClient: Client<Category> = new CategoryCli
             .finally(() => { setIsLoading(false) });
     }
 
-
-    function combineRecipeWithCategories(item: Recipe, categories: Category[]): Recipe & { categories: Category[] } {
+    function combineRecipeWithCategories(item: Recipe, categories?: Category[]): DisplayRecipe {
         if (categories === undefined) {
-            return { ...item }
+            return { ...item, categories: [] }
         }
-        const fullCategories = item.categories?.map(x => categories.find(y => y.id == x) ?? { id: x, name: "?" });
-        item.categories = fullCategories;
-        return item;
+        const fullCategories: Category[] = item.categories?.map(cid => categories.find(c2 => c2.id == cid) ?? { id: cid, name: "?" });
+        return { ...item, categories: fullCategories };
     }
 
     /** Recipes */
-
-    async function processRecipe({ item, addCategory }: { item: RecipeRequest; addCategory: (item: Category) => Promise<Category>; addRecipe: (item: Recipe) => Promise<Recipe>; editRecipe: (item: Recipe) => Promise<Recipe>; }): Recipe {
-        async function updateCategories({ ids = [], names = [] }: { ids: number[], names: string[] }): Promise<number[]> {
-            async function addCategories(names: string[]) {
-                return await Promise.all(names.map(async (name) => {
-                    return addCategory({ id: undefined, name });
-                }));
-            }
-
-            const newIDs = await addCategories(names);
-            return [...ids, ...newIDs];
+    async function updateCategories(ids: number[] = [], names: string[] = []): Promise<number[]> {
+        async function addCategories(names: string[]) {
+            return await Promise.all(names.map(async (name) => {
+                return addCategory({ id: undefined, name });
+            }));
         }
 
-
-        const categoryIDs = await updateCategories(item.categories);
-        const processedItem = { ...item, categories: categoryIDs };
-        return processedItem
+        const newIDs = await addCategories(names);
+        return [...ids, ...newIDs];
     }
 
-    async function addRecipe(item: RecipeRequest): Promise<number> {
+    async function addRecipe(item: OptionalID<Recipe>, pendingCategories?: string[]): Promise<void> {
         setIsLoading(true);
-        const recipe = await processRecipe({ item, addCategory });
-        return recipeClient.add(recipe)
-            .then((recipe: Recipe) => { setRecipes([...recipes, recipe]); })
+        const categoryIDs = await updateCategories(item.categories, pendingCategories);
+        const recipeWithCategories = { ...item, categories: categoryIDs };
+        return recipeClient.add(recipeWithCategories)
+            .then((recipe: Recipe) => {
+                const displayRecipe = combineRecipeWithCategories(recipe, categories);
+                setRecipes([...(recipes ?? []), displayRecipe]);
+            })
             .catch((reason: Error) => { setErrorMessage(reason.message) })
             .finally(() => { setIsLoading(false) });
-
-        return 0; //TODO
     }
 
-    async function editRecipe(item: RecipeRequest): Promise<number> {
+    async function editRecipe(item: Recipe, pendingCategories?: string[]): Promise<void> {
         setIsLoading(true);
-        const recipe = await processRecipe({ item, addCategory });
-        return recipeClient.update(recipe)
-            .then((recipe: Recipe) => { setRecipes([...recipes?.filter(x => x.id !== recipe.id) ?? [], recipe]); })
+        const categoryIDs = await updateCategories(item.categories, pendingCategories);
+        const updateRecipe: Recipe = { ...item, categories: categoryIDs };
+        return recipeClient.update(updateRecipe)
+            .then((recipe: Recipe) => {
+                const displayRecipe = combineRecipeWithCategories(recipe, categories);
+                setRecipes([...recipes?.filter(x => x.id !== updateRecipe.id) ?? [], displayRecipe]);
+            })
             .catch((reason: Error) => { setErrorMessage(reason.message) })
             .finally(() => { setIsLoading(false) });
-        return recipe.id;
     }
 
     function clearErrorMessage() {
         setErrorMessage(undefined);
     }
-    return { recipes: { recipes, addRecipe, editRecipe }, categories: { categories, addCategory, editCategory }, clearErrorMessage, isLoading, errorMessage };
+    
+    return {
+        recipes: { recipes: recipes ?? [], addRecipe, editRecipe }, categories: { categories: categories ?? [], addCategory, editCategory }, clearErrorMessage, isLoading, errorMessage
+    };
 }

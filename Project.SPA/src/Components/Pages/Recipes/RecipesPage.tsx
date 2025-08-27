@@ -1,7 +1,6 @@
-import type React from 'react';
 import { useState } from 'react';
 import { RecipeTable } from './RecipeTable';
-import type { Recipe, RecipeRequest, Category, DisplayRecipe } from '../../../Types';
+import type { Recipe, Category, DisplayRecipe, OptionalID } from '../../../Types';
 import { RecipeList } from './RecipeList';
 import { RecipeFormDialog } from './Form/RecipeFormDialog';
 import { RecipeCards } from './Card/RecipeCards';
@@ -12,7 +11,7 @@ interface RecipePageProps {
     categories: Category[];
     isLoading: boolean;
     variant?: "list" | "table" | "cards";
-    onSubmit: (item: Recipe) => Promise<void>;
+    onSubmit: (item: OptionalID<Recipe>, categoryNames?: string[]) => Promise<void>;
 }
 
 /**
@@ -24,22 +23,24 @@ interface RecipePageProps {
 export function RecipesPage({ onSubmit: onAddSubmit, categories, isLoading, recipes, variant = "table" }: RecipePageProps) {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showDetail, setShowDetail] = useState<boolean>(false);
-    const [selected, setSelected] = useState<Recipe | undefined>(undefined);
+    const [selected, setSelected] = useState<DisplayRecipe | undefined>(undefined);
 
-    const handleEdit: (item: Recipe) => void = (item) => {
-        setSelected(item);
-        setShowForm(true);
+    const handleEdit: (item?: DisplayRecipe) => void = (item) => {
+        if (item !== undefined) {
+            setSelected(item);
+            setShowForm(true);
+        }
     }
 
-    const handleDetailClick: (item: Recipe) => void = (item) => {
+    const handleDetailClick: (item: DisplayRecipe) => void = (item) => {
         setSelected(item);
-        setShowDetail(item);
+        setShowDetail(true);
     }
 
 
-    const handleSubmit = (item: RecipeRequest) => {
+    const handleSubmit = (item: OptionalID<Recipe>, categoryNames?: string[]) => {
         setShowForm(false);
-        onAddSubmit(item);
+        onAddSubmit(item, categoryNames);
     }
 
     function handleFormClose() {
@@ -47,7 +48,7 @@ export function RecipesPage({ onSubmit: onAddSubmit, categories, isLoading, reci
         setShowForm(false);
     }
 
-    const getRecipes = (variant) => {
+    const getRecipes = (variant: string) => {
         switch (variant) {
             case 'list': return <RecipeList recipes={recipes} isLoading={isLoading} onClick={handleEdit} />;
             case 'cards': return <RecipeCards recipes={recipes} isLoading={isLoading} onEdit={handleEdit} onClick={handleDetailClick} />;

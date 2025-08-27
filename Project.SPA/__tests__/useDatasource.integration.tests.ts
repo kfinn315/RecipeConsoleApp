@@ -1,11 +1,12 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useRecipes } from "../src/Hooks";
-import type { Recipe } from "../src/Types";
+import { useDatasource } from "../src/Hooks";
+import type { DisplayRecipe, Recipe } from "../src/Types";
 
-describe("useRecipes integration tests", () => {
+import { type OptionalID } from '../src/Types/OptionalID';
 
+describe("useDatasource integration tests", () => {
     it("loads recipes from the API", async () => {
-        const { result } = renderHook(() => useRecipes());
+        const { result } = renderHook(() => useDatasource());
 
         // Wait for the recipes to load
         await waitFor(() => {
@@ -13,22 +14,21 @@ describe("useRecipes integration tests", () => {
         });
 
         // Assert that recipes are loaded
-        expect(result.current.recipes).toEqual([
+        expect(result.current.recipes.recipes).toEqual([
             { id: 1, title: "Recipe1", categories: [0], ingredients: ["ingredient1"], instructions: "instructions" },
             { id: 2, title: "Recipe2", categories: [1], ingredients: ["ingredient2"], instructions: "instructions" },
         ]);
     });
 
     it("adds a new recipe via the API", async () => {
-        const newRecipe: Recipe = {
-            id: undefined,
+        const newRecipe: OptionalID<Recipe> = {
             title: "New Recipe",
             categories: [2],
             ingredients: ["ingredient3"],
             instructions: "new instructions",
         };
 
-        const { result } = renderHook(() => useRecipes());
+        const { result } = renderHook(() => useDatasource());
 
         // Wait for initial recipes to load
         await waitFor(() => {
@@ -37,11 +37,11 @@ describe("useRecipes integration tests", () => {
 
         // Add a new recipe
         await act(async () => {
-            await result.current.addRecipe(newRecipe);
+            await result.current.recipes.addRecipe(newRecipe);
         });
 
         // Assert that the new recipe is added
-        expect(result.current.recipes).toContainEqual({
+        expect(result.current.recipes.recipes).toContainEqual({
             id: 3,
             title: "New Recipe",
             categories: [2],
@@ -58,8 +58,14 @@ describe("useRecipes integration tests", () => {
             ingredients: ["updated ingredient"],
             instructions: "updated instructions",
         };
-
-        const { result } = renderHook(() => useRecipes());
+        const expectedRecipe: DisplayRecipe = {
+            id: 1,
+            title: "Updated Recipe",
+            categories: [{ id: 0, name: "" }],
+            ingredients: ["updated ingredient"],
+            instructions: "updated instructions",
+        };
+        const { result } = renderHook(() => useDatasource());
 
         // Wait for initial recipes to load
         await waitFor(() => {
@@ -68,11 +74,11 @@ describe("useRecipes integration tests", () => {
 
         // Update a recipe
         await act(async () => {
-            await result.current.editRecipe(updatedRecipe);
+            await result.current.recipes.editRecipe(updatedRecipe);
         });
 
         // Assert that the recipe is updated
-        expect(result.current.recipes).toContainEqual(updatedRecipe);
+        expect(result.current.recipes.recipes).toContainEqual(expectedRecipe);
     });
 
     // it("handles API errors gracefully", async () => {

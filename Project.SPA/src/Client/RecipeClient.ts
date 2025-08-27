@@ -1,4 +1,4 @@
-import type { Recipe } from "../Types";
+import type { Recipe, OptionalID } from "../Types";
 import { BaseClient } from "./BaseClient";
 import type { Client } from "./Client";
 
@@ -15,7 +15,7 @@ export class RecipeClient implements Client<Recipe> {
         return this.baseClient.get<Recipe[]>(this.recipeEndpoint);
     }
 
-    add(item: Recipe): Promise<Recipe> {
+    add(item: OptionalID<Recipe>): Promise<Recipe> {
         console.log('add rec');
         return this.baseClient.add<Recipe>(this.recipeEndpoint, item);
     }
