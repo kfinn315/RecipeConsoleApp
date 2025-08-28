@@ -10,27 +10,27 @@ public static class CategoryEndpoints
         app.MapGet("/categories", async (IRepository<Category> repository) =>
         {
             return Results.Ok(await repository.GetListAsync());
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<IEnumerable<Category>>();
 
         // Get a specific recipe by ID
         app.MapGet("/categories/{id}", async (int id, IRepository<Category> repository) =>
         {
             var category = await repository.GetByIdAsync(id);
             return category is not null ? Results.Ok(category) : Results.NotFound();
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<Category>(); //TODO do the rest of these
 
         app.MapPost("/categories", async (Category category, IRepository<Category> repository) =>
         {
 
             var newCategory = await repository.AddAsync(category);
             return Results.Ok(newCategory);
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<Category>(201);
 
         app.MapPut("/categories/{id}", async (int id, Category category, IRepository<Category> repository) => //edit
             {
                 await repository.UpdateAsync(category);
                 return Results.Ok(category);
-            }).WithOpenApi();
+            }).WithOpenApi().Produces<Category>();
 
         // Delete a recipe
         app.MapDelete("/categories/{id}", async (int id, IRepository<Category> repository) =>
@@ -39,7 +39,7 @@ public static class CategoryEndpoints
             if (existingCategory is null) return Results.NotFound();
 
             await repository.DeleteAsync(existingCategory);
-            return Results.NoContent();
-        }).WithOpenApi();
+            return Results.Ok(true);
+        }).WithOpenApi().Produces<bool>();
     }
 }

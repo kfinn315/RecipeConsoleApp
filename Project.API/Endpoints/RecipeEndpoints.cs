@@ -10,28 +10,28 @@ public static class RecipeEndpoints
         app.MapGet("/recipes", async (IRepository<Recipe> repository) =>
         {
             return Results.Ok(await repository.GetListAsync());
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<IEnumerable<Recipe>>();
 
         // Get a specific recipe by ID
         app.MapGet("/recipes/{id}", async (int id, IRepository<Recipe> repository) =>
         {
             var recipe = await repository.GetByIdAsync(id);
             return recipe is not null ? Results.Ok(recipe) : Results.NotFound();
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<Recipe>();
 
         app.MapPost("/recipes", async (Recipe recipe, IRepository<Recipe> repository) =>
         {
             await repository.AddAsync(recipe);
             // return Results.Ok(recipe);
             return Results.Created($"/recipes/{recipe.Id}", recipe);
-        }).WithOpenApi();
+        }).WithOpenApi().Produces<Recipe>(201);
 
         app.MapPut("/recipes/{id}", async (int id, Recipe recipe, IRepository<Recipe> repository) => //edit
             {
 
                 await repository.UpdateAsync(recipe);
                 return Results.Ok(recipe);
-            }).WithOpenApi();
+            }).WithOpenApi().Produces<Recipe>();
 
         // Delete a recipe
         app.MapDelete("/recipes/{id}", async (int id, IRepository<Recipe> repository) =>
@@ -40,7 +40,7 @@ public static class RecipeEndpoints
             if (existingRecipe is null) return Results.NotFound();
 
             await repository.DeleteAsync(existingRecipe);
-            return Results.NoContent();
-        }).WithOpenApi();
+            return Results.Ok(true);
+        }).WithOpenApi().Produces<bool>();
     }
 }
