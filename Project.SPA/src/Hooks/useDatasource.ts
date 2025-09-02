@@ -20,11 +20,11 @@ interface UseDatasource {
     }
 }
 
-export function useDatasource(categoryClient: CategoryClient = new CategoryClient(baseUrl), recipeClient: RecipeClient = new RecipeClient(baseUrl)): UseDatasource {
+export function useDatasource(categoryClient: CategoryClient = new CategoryClient(baseUrl), recipeClient: RecipeClient = new RecipeClient(baseUrl), intialState?: { errorMessage?: string }): UseDatasource {
     const [categories, setCategories] = useState<Category[] | undefined>(undefined);
     const [recipes, setRecipes] = useState<DisplayRecipe[] | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(intialState?.errorMessage ?? undefined);
 
     useEffect(() => {
         setIsLoading(true);
@@ -122,7 +122,7 @@ export function useDatasource(categoryClient: CategoryClient = new CategoryClien
     function clearErrorMessage() {
         setErrorMessage(undefined);
     }
-    
+
     return {
         recipes: { recipes: recipes ?? [], addRecipe, editRecipe }, categories: { categories: categories ?? [], addCategory, editCategory }, clearErrorMessage, isLoading, errorMessage
     };

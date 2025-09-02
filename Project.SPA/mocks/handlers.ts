@@ -11,7 +11,7 @@ import { faker } from "@faker-js/faker";
 faker.seed(1);
 
 const baseURL = "http://localhost:5101";
-const MAX_ARRAY_LENGTH = 20;
+const MAX_ARRAY_LENGTH = 5;
 
 // Map to store counters for each API endpoint
 const apiCounters = new Map<string, number>();
@@ -83,7 +83,7 @@ export const handlers = [
       ...resultArray[next(`get /recipes`) % resultArray.length],
     );
   }),
-  http.post(`${baseURL}/recipes`, async () => {
+  http.post(`${baseURL}/recipes`, async ({ request }) => {
     const resultArray = [[getPostRecipes201Response(), { status: 201 }]] as [
       any,
       { status: number },
